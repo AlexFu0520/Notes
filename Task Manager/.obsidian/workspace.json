@@ -1,0 +1,180 @@
+{
+  "main": {
+    "id": "b3741fede2642e61",
+    "type": "split",
+    "children": [
+      {
+        "id": "79ba73ce9db4cc48",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9a16a35bc747123b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tutorial.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7eb2f50e5a2f43ab",
+    "type": "split",
+    "children": [
+      {
+        "id": "5150364a54d91f5e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e2b213ec18cb9949",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "7cb7d25f51db608d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "d8bf789f8fc5fd61",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b0549ab959bea532",
+    "type": "split",
+    "children": [
+      {
+        "id": "8fc4dc8488b4145f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "36b681fa10a00b96",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Tutorial.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "fa18598909fdd2f3",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Tutorial.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "665bd8c6bf990291",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "579dd7b4e79077a2",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Tutorial.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "9a16a35bc747123b",
+  "lastOpenFiles": [
+    "_utilities/Today.md",
+    "_utilities/Inbox.md",
+    "_utilities/Deadlines.md",
+    "_templates/Project.md",
+    "Tutorial.md",
+    "2024/10/2024-10-03 Thu.md",
+    "Recurring.md",
+    "_utilities/Recurring.md",
+    "_utilities/Upcoming.md",
+    "_utilities/Anytime.md",
+    "Areas/Personal.md",
+    "Projects/Active/My awesome project.md",
+    "Projects/Done",
+    "Projects/Holding Tank",
+    "Projects/Active",
+    "Projects",
+    "Areas/Work.md",
+    "_utilities/Someday.md",
+    "Areas",
+    "2024/10/2024-10-02 Wed.md",
+    "2024/10/2024-10-01 Tue.md",
+    "_utilities",
+    "_templates/Daily Note.md",
+    "2024/10",
+    "2024",
+    "2024/10/2024-10.md",
+    "Welcome.md",
+    "_templates"
+  ]
+}

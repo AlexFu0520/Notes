@@ -1,0 +1,2 @@
+- [ ] Take out the trash 🔁 every week on Tuesday ⏳ 2024-10-08
+- [x] Take out the trash 🔁 every week on Tuesday ⏳ 2024-10-01 ✅ 2024-10-01
