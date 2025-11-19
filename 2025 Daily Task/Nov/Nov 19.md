@@ -1,8 +1,8 @@
  - [ ] 完成组会cst汇报ppt
  - [ ] 写概率论作业，练习14
- - [ ] 看missing semester下一节课
- - [ ] 提交力扣10道题
- - [ ] 打牛客比赛
- - [ ] 看复变函数网课，记笔记
- - [ ] 看mssing semester下一节课
+ - [x] 看missing semester下一节课
+ - [x] 提交力扣10道题
+ - [x] 打牛客比赛
+ - [x] 看复变函数网课，记笔记
+ - [x] 看mssing semester下一节课
  - [ ] 打印matlab报告书

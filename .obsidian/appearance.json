@@ -1,5 +1,6 @@
 {
   "cssTheme": "Cupertino",
   "accentColor": "#ff57f1",
-  "monospaceFontFamily": ""
+  "monospaceFontFamily": "",
+  "theme": "moonstone"
 }
