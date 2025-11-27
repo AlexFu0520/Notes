@@ -15,7 +15,8 @@ int main() {
 	partial_sum(input.begin(), input.end(), output.begin()); 
 	// 输出结果 
 	for (int num : output) { std::cout << num << " "; 
-	// 输出：1 3 6 10 15 } 
+	// 输出：1 3 6 10 15
+	} 
 	
 	return 0; }
 ```
