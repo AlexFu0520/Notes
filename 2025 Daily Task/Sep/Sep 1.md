@@ -1,0 +1,8 @@
+- [ ] finish group meeting ppt of cst
+- [ ] print the MATLAB report
+- [ ] review the cf educational round 185
+- [ ] write the experiment report of the fundation of curcuit analysis
+- [ ] submit 10 problems on leetcode
+- [ ] write 2 complex function exam paper
+- [ ] buy the Macbook Air M4 !!!!!
+- [ ] review the complex function
