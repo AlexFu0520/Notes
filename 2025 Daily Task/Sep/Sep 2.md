@@ -1,3 +1,8 @@
 - [ ] ["D:\作业\复变函数\复变函数与积分变换试题及答案14.pdf"]
 - [ ] ["D:\作业\复变函数\长江大学《复变函数》2023-2024学年第二学期期末试卷.pdf"]
 - [ ] ["D:\作业\复变函数\长江大学《复变函数与积分变换》2022-2023学年第一学期期末试卷.pdf"]
+- [ ]  finish group meeting ppt of cst
+- [ ] print out and check the MATLAB report
+- [ ] write the experiment report of the fundation of curcuit analysis
+- [ ] submit 10 problems on leetcode
+- [ ] write the 
