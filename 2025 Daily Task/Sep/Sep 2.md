@@ -5,4 +5,5 @@
 - [ ] print out and check the MATLAB report
 - [ ] write the experiment report of the fundation of curcuit analysis
 - [ ] submit 10 problems on leetcode
-- [ ] write the 
+- [ ] write the probability theory homework
+- [ ] review the complex function pdf["D:\作业\复变函数\复变函数作业答案(1).pdf"]
