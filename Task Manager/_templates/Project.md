@@ -1,9 +1,0 @@
----
-deadline:
-area:
----
-## Tasks
-
----
-## Notes
-
