@@ -2,6 +2,5 @@
 - [ ] print out and check the MATLAB report
 - [ ] write the experiment report of the fundation of curcuit analysis
 - [ ] write the probability theory homework
-- [ ] review complax function's fourteenth ppt
+- [ ] review complax function's the fourteenth ppt
 - [ ] submit 10 problems on leetcode
-- [ ] 
