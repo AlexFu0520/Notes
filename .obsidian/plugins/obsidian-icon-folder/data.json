@@ -6,6 +6,8 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiAtom",
+      "LiActivitySquare",
       "LiMessageSquareCode",
       "LiCode2",
       "LiBadgeCheck"
@@ -19,7 +21,7 @@
       "left": 0
     },
     "iconInTabsEnabled": false,
-    "iconInTitleEnabled": true,
+    "iconInTitleEnabled": false,
     "iconInTitlePosition": "above",
     "iconInFrontmatterEnabled": false,
     "iconInFrontmatterFieldName": "icon",
@@ -43,5 +45,17 @@
   "code study": {
     "iconName": "LiMessageSquareCode",
     "iconColor": "#deeb1e"
+  },
+  "鸡汤": {
+    "iconName": "LiActivitySquare",
+    "iconColor": "#e63333"
+  },
+  "Code Study": {
+    "iconName": "LiAtom",
+    "iconColor": "#56a8f5"
+  },
+  "Algorithm": {
+    "iconName": "LiMessageSquareCode",
+    "iconColor": "#e32df0"
   }
 }
