@@ -1,4 +1,4 @@
-- [ ] finish group meeting ppt of cst 
+- [ ] finish group meeting ppt of cst  
 - [ ] print out and check the MATLAB report
 - [ ] write the experiment report of the fundation of curcuit analysis
 - [ ] write the probability theory homework
