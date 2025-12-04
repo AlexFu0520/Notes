@@ -1,0 +1,7 @@
+- [ ] finish group meeting ppt of cst    ddl:  December 7
+- [ ] print out and check the MATLAB report
+- [ ] write the experiment report of the fundation of circuit analysis
+- [ ] write the probability theory homework
+- [ ]  write circuit fundation home work
+- [ ] write the math and physicis functions homework
+- [ ] solve 10 problems on leetcode
