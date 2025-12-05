@@ -1,6 +1,6 @@
-- [ ] finish group meeting ppt of cst    ddl:  December 7
+- [x] finish group meeting ppt of cst    ddl:  December 7
 - [ ] print out and check the MATLAB report
-- [ ] write the experiment report of the fundation of circuit analysis
+- [x] write the experiment report of the fundation of circuit analysis
 - [ ] write the probability theory homework
 - [x]  write circuit fundation home work
 - [x] write the math and physicis functions homework

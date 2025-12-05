@@ -1,0 +1,3 @@
+- [ ] print out and check the MATLAB report
+- [ ] write the probability theory homework
+- [ ] write circuit analysis fundation chapter 3 and chapter 5 conclus
