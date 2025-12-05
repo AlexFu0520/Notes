@@ -4,4 +4,4 @@
 - [ ] solve 10 problems on leetcode
 - [ ] write preview expriment report of circuit analysis fundation 
 - [ ] optimize my model,draw the absorption graph
-- [ ] wirte physicis homework 
+- [ ] wirte physicis homework
