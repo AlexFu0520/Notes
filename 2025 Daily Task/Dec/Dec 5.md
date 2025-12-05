@@ -4,4 +4,4 @@
 - [ ] write the probability theory homework
 - [x]  write circuit fundation home work
 - [x] write the math and physicis functions homework
-- [ ] solve 10 problems on leetcode
+- [x] solve 10 problems on leetcode
