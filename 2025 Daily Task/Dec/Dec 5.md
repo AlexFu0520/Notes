@@ -5,3 +5,4 @@
 - [x]  write circuit fundation home work
 - [x] write the math and physicis functions homework
 - [x] solve 10 problems on leetcode
+- [x] attend cf competition div2

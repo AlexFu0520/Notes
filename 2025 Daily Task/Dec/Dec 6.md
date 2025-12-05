@@ -5,4 +5,3 @@
 - [ ] write preview expriment report of circuit analysis fundation 
 - [ ] optimize my model,draw the absorption graph
 - [ ] wirte physicis homework 
-- [ ] attend cf competition div2
