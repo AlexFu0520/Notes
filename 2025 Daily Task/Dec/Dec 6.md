@@ -1,3 +1,8 @@
 - [ ] print out and check the MATLAB report
 - [ ] write the probability theory homework
-- [ ] write circuit analysis fundation chapter 3 and chapter 5 conclus
+- [ ] write circuit analysis fundation chapter 3 and chapter 5 conclusion
+- [ ] solve 10 problems on leetcode
+- [ ] write preview expriment report of circuit analysis fundation 
+- [ ] optimize my model,draw the absorption graph
+- [ ] wirte physicis homework 
+- [ ] attend cf competition div2
