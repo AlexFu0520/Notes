@@ -1,0 +1,7 @@
+- [ ] write the probability theory homework
+- [ ] write circuit analysis fundation chapter 3 and chapter 5 conclusion
+- [ ]  wirte physicis homework
+- [ ] solve 10 problems on leetcode
+- [ ] learn the mit How to AI everything
+- [ ] config linux on mac
+- [ ] finish circuit analysis fundation expriment report and preview report
