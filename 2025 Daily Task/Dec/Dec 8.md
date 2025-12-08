@@ -1,7 +1,7 @@
-- [ ]  write the probability theory homework
+- [x]  write the probability theory homework
 - [ ] write circuit analysis fundation chapter 3 and chapter 5 conclusion
 - [ ]  wirte physicis homework
-- [ ] finish circuit analysis fundation expriment report and preview report
-- [ ] solve 10 problems in leetcode
+- [x] finish circuit analysis fundation expriment report and preview report
+- [x] solve 10 problems in leetcode
 - [ ] review cf round 1068 div2
-- [ ] watch the probability theory course online
+- [x] watch the probability theory course online
