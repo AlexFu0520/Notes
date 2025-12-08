@@ -1,0 +1,7 @@
+ - [ ] write circuit analysis fundation chapter 3 and chapter 5 conclusion
+ - [ ] review cf round 1068 div2
+ - [ ] solve 10 problems on leetcode
+ - [ ] write the preview report of the circuit fundation expriment
+ - [ ] watch the probability thoery course online
+ - [ ] optimize my model on cst
+ - [ ] conclude knowledge of history
