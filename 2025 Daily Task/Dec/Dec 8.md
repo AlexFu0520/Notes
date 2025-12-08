@@ -1,6 +1,6 @@
 - [x]  write the probability theory homework
 - [ ] write circuit analysis fundation chapter 3 and chapter 5 conclusion
-- [ ]  wirte physicis homework
+- [x]  wirte physicis homework
 - [x] finish circuit analysis fundation expriment report and preview report
 - [x] solve 10 problems in leetcode
 - [ ] review cf round 1068 div2
