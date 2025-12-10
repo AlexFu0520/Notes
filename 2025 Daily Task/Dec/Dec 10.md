@@ -1,7 +1,7 @@
-- [ ] optimize my model on cst
-- [ ] conclude knowledge of history
-- [ ] solve 10 problems on leet code
+- [x] optimize my model on cst
+- [x] conclude knowledge of history
+- [x] solve 10 problems on leet code
 - [ ] wirte the physicis home work practice 34
 - [ ] learn the matlab math model setting 
-- [ ] watch the probability theory courses online
+- [x] watch the probability theory courses online
 - [ ] write the probability theory practice 

@@ -1,0 +1,8 @@
+- [ ] wirte the physicis home work practice 34
+- [ ] learn the matlab math model setting 
+- [ ] write the probability theory practice 
+- [ ] solve 10 problems on leetcode
+- [ ] watch the probability theory course online
+- [ ] write the math and phycisis function home work
+- [ ] write probability thoery homework
+- [ ] optimize my model on cst
