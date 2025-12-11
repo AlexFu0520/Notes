@@ -1,0 +1,6 @@
+- [ ] learn the matlab math model setting 
+- [ ] write the probability theory practice 
+- [ ] solve 10 problems on leetcode
+- [ ] write the probability thoery practice
+- [ ] write the math and physicis function practice
+- [ ] optimize my model on cst

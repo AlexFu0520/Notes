@@ -1,8 +1,8 @@
-- [ ] wirte the physicis home work practice 34
+- [x] wirte the physicis home work practice 34
 - [ ] learn the matlab math model setting 
 - [ ] write the probability theory practice 
-- [ ] solve 10 problems on leetcode
-- [ ] watch the probability theory course online
-- [ ] write the math and phycisis function home work
-- [ ] write probability thoery homework
-- [ ] optimize my model on cst
+- [x] solve 10 problems on leetcode
+- [x] watch the probability theory course online
+- [x] write the math and phycisis function home work
+- [x] write probability thoery homework
+- [x] optimize my model on cst
