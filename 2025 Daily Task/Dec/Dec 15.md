@@ -3,3 +3,4 @@
 - [ ] review math and physicis function Chapter.2
 - [ ] recite history knowledge
 - [ ] write my paper
+- [ ] learn MEX
