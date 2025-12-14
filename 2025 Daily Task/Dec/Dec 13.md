@@ -1,5 +1,5 @@
- - [ ] write probability theory practice Chapter.2
- - [ ] solve 10 problems on leetcode
- - [ ] write the math and physicis function practice Chapter.1
- - [ ] review physicis Chapter.1
- - [ ] recite history knowledge
+ - [x] write probability theory practice Chapter.2
+ - [x] solve 10 problems on leetcode
+ - [x] write the math and physicis function practice Chapter.1
+ - [x] review physicis Chapter.1
+ - [x] recite history knowledge

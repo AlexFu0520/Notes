@@ -1,0 +1,4 @@
+ - [x] write probability theory practice Chapter.3
+ - [x] solve 10 problems on leetcode
+ - [ ] review math and physicis function Chapter.2
+ - [x] recite history knowledge

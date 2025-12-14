@@ -38,10 +38,6 @@
     "iconName": "LiBadgeCheck",
     "iconColor": "#71f109"
   },
-  "algorithm": {
-    "iconName": "LiCode2",
-    "iconColor": "#229fec"
-  },
   "code study": {
     "iconName": "LiMessageSquareCode",
     "iconColor": "#deeb1e"
@@ -57,5 +53,9 @@
   "Algorithm": {
     "iconName": "LiMessageSquareCode",
     "iconColor": "#e32df0"
+  },
+  "algorithm template": {
+    "iconName": "LiCode2",
+    "iconColor": "#229fec"
   }
 }

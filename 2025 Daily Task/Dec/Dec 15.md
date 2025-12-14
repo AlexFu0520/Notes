@@ -1,0 +1,5 @@
+- [ ] solve 10 problems on leetcode
+- [ ] write prabability theory practice Chapter.3
+- [ ] review math and physicis function Chapter.2
+- [ ] recite history knowledge
+- [ ] write my paper
