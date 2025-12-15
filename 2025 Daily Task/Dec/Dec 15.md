@@ -1,6 +1,6 @@
-- [ ] solve 10 problems on leetcode
-- [ ] write prabability theory practice Chapter.3
+- [x] solve 10 problems on leetcode
+- [x] write prabability theory practice Chapter.3
 - [ ] review math and physicis function Chapter.2
-- [ ] recite history knowledge
+- [x] recite history knowledge
 - [ ] write my paper
 - [ ] learn MEX

@@ -1,0 +1,6 @@
+- [ ]  review math and physicis function Chapter.2
+- [ ] write probability theory Chapter.4
+- [ ] review physicis Chapter.2
+- [ ] recite history knowledge
+- [ ] write my paper
+- [ ] learn MEX
