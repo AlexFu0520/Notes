@@ -1,6 +1,7 @@
-- [ ]  review math and physicis function Chapter.2
-- [ ] write probability theory Chapter.4
-- [ ] review physicis Chapter.2
-- [ ] recite history knowledge
+- [x]  review math and physicis function Chapter.2
+- [x] write probability theory Chapter.4
+- [x] review physicis Chapter.2
+- [x] write math and physics function homrwork
+- [x] recite history knowledge
 - [ ] write my paper
 - [ ] learn MEX
