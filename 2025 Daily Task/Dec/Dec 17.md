@@ -1,6 +1,6 @@
 - [ ] review math and physicis function Chapter.2
-- [ ] write probability theory Chapter.5
-- [ ] recite history points 30 mins
-- [ ] write my paper
-- [ ] learn MEX
-- [ ] review circuit analysis fundation Chapter.1
+- [x] write probability theory Chapter.5
+- [x] recite history points 30 mins
+- [x] write my paper
+- [x] learn MEX
+- [x] review circuit analysis fundation Chapter.1

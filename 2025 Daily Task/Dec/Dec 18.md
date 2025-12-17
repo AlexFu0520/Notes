@@ -1,0 +1,8 @@
+- [ ] review math and physics function Chapter.2
+- [ ] write probability theory Chapter.6
+- [ ] review physics Chapter.3
+- [ ] write my paper
+- [ ] recite history knowledge 30 mins
+- [ ] write circuit analysis fundation homework
+- [ ] write physics homework
+- [ ] write math and physics function homework
