@@ -1,8 +1,9 @@
 - [ ] review math and physics function Chapter.2
-- [ ] write probability theory Chapter.6
+- [x] write probability theory Chapter.6
 - [ ] review physics Chapter.3
+- [x] solve 10 problems on leetcode
 - [ ] write my paper
-- [ ] recite history knowledge 30 mins
-- [ ] write circuit analysis fundation homework
+- [x] recite history knowledge 30 mins
+- [x] write circuit analysis fundation homework
 - [ ] write physics homework
-- [ ] write math and physics function homework
+- [x] write math and physics function homework

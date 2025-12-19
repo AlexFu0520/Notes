@@ -22,6 +22,7 @@
   "cupertino@@windows-off": true,
   "cupertino@@active-line-off": false,
   "cupertino@@compact-actions-off": false,
-  "cupertino@@compact-status-bar-off": false,
-  "cupertino@@zoom-off": false
+  "cupertino@@compact-status-bar-off": true,
+  "cupertino@@zoom-off": false,
+  "cupertino@@liquid-glass-tint-off": false
 }
