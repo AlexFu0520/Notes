@@ -1,7 +1,7 @@
 {
   "cssTheme": "Cupertino",
-  "accentColor": "#0cacd4",
+  "accentColor": "",
   "monospaceFontFamily": "",
   "theme": "obsidian",
-  "translucency": false
+  "translucency": true
 }

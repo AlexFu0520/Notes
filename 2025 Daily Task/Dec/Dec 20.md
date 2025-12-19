@@ -1,0 +1,9 @@
+- [ ] write physics homework and conclude Chapter.3
+- [ ] review math and physics function Chapter.2
+- [ ] write probability theory Chapter.6
+- [ ]  review circuit analysis fundation Chapter.2
+- [ ] write the circuit analysis fundation home work
+- [ ] finish the circuit analysis fundation simulation expriment
+- [ ] solve 10 problems on leetcode
+- [ ] write my paper
+- [ ]  recite history knowledge 30 mins
