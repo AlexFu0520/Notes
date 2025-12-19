@@ -2,5 +2,8 @@
   "strictLineBreaks": true,
   "showLineNumber": true,
   "promptDelete": false,
-  "spellcheck": false
+  "spellcheck": false,
+  "newLinkFormat": "shortest",
+  "attachmentFolderPath": "./images",
+  "alwaysUpdateLinks": true
 }
