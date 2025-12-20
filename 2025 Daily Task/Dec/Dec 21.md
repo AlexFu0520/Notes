@@ -1,0 +1,6 @@
+- [ ] write probability theory Chapter.6
+- [ ]  review circuit analysis fundation Chapter.2
+- [ ] solve 10 problems on leetcode
+- [ ] write my paper
+- [ ]  recite history knowledge 30 mins
+- [ ] finish the circuit analysis fundation simulation expriment
