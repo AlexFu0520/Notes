@@ -2,5 +2,5 @@
 - [ ]  review circuit analysis fundation Chapter.2
 - [x] solve 10 problems on leetcode
 - [x] write my paper
-- [ ]  recite history knowledge 30 mins
+- [x]  recite history knowledge 30 mins
 - [ ] finish the circuit analysis fundation simulation expriment
