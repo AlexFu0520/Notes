@@ -1,0 +1,6 @@
+- [x] solve 10 problems on leetcode
+- [ ] write my essay
+- [x]  recite history knowledge 30 mins
+- [ ] review Physics Chapter.3
+- [x] write the circuit analysis fundation expriment * 2
+- [ ] prepare the group meeting ppt
