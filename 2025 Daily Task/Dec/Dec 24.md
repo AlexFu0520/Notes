@@ -1,0 +1,5 @@
+- [x]  solve 10 problems on leetcode
+- [ ] write my essay
+- [ ]  recite history knowledge 30 mins
+- [ ] review Physics Chapter.3
+- [ ] prepare the group meeting ppt
