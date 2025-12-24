@@ -3,5 +3,6 @@
   "accentColor": "",
   "monospaceFontFamily": "",
   "theme": "obsidian",
-  "translucency": true
+  "translucency": false,
+  "nativeMenus": true
 }

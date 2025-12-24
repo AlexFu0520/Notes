@@ -18,13 +18,6 @@
   "anuppuccin-theme-settings@@anp-full-rainbow-text-color-toggle-light": false,
   "anuppuccin-theme-settings@@anp-full-rainbow-text-color-toggle-dark": false,
   "anuppuccin-theme-settings@@anp-rainbow-folder-bg-opacity": 0.2,
-  "cupertino@@liquid-glass-off": true,
-  "cupertino@@windows-off": true,
-  "cupertino@@active-line-off": false,
-  "cupertino@@compact-actions-off": false,
-  "cupertino@@compact-status-bar-off": false,
-  "cupertino@@zoom-off": false,
-  "cupertino@@liquid-glass-tint-off": false,
   "Appearance-light@@card-layout-open-light": true,
   "Appearance-dark@@card-layout-open-dark": true,
   "Appearance-dark@@card-highlight-dark": true,
@@ -48,8 +41,7 @@
   "Components@@file-icon-remove": true,
   "Components@@colorful-folder": false,
   "Components@@outline-enhanced": true,
-  "cupertino@@block-width-off": false,
-  "cupertino@@media-dimming-off": false,
-  "cupertino@@font-variant-off": false,
-  "cupertino@@metadata-heading-off": false
+  "Appearance-dark@@background-underlying-select-dark": "background-underlying-Color-dark",
+  "Appearance-dark@@background-underlying-dark": "#000000",
+  "cupertino@@reduce-contrast-change": false
 }

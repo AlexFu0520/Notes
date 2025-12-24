@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiBook",
       "LiAtom",
       "LiActivitySquare",
       "LiMessageSquareCode",
-      "LiCode2",
-      "LiBadgeCheck"
+      "LiCode2"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -57,5 +57,9 @@
   "algorithm template": {
     "iconName": "LiCode2",
     "iconColor": "#229fec"
+  },
+  "近代史知识点": {
+    "iconName": "LiBook",
+    "iconColor": "#6ef96c"
   }
 }
