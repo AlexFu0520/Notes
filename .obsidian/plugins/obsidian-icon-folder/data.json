@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiAnvil",
       "LiBook",
       "LiAtom",
       "LiActivitySquare",
-      "LiMessageSquareCode",
-      "LiCode2"
+      "LiMessageSquareCode"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -38,28 +38,24 @@
     "iconName": "LiBadgeCheck",
     "iconColor": "#71f109"
   },
-  "code study": {
-    "iconName": "LiMessageSquareCode",
-    "iconColor": "#deeb1e"
-  },
   "鸡汤": {
     "iconName": "LiActivitySquare",
     "iconColor": "#e63333"
   },
   "Code Study": {
-    "iconName": "LiAtom",
-    "iconColor": "#56a8f5"
+    "iconName": "LiMessageSquareCode",
+    "iconColor": "#deeb1e"
   },
   "Algorithm": {
     "iconName": "LiMessageSquareCode",
     "iconColor": "#e32df0"
   },
-  "algorithm template": {
+  "Lesson": {
+    "iconName": "LiBook",
+    "iconColor": "#9af099"
+  },
+  "Algorithm Template": {
     "iconName": "LiCode2",
     "iconColor": "#229fec"
-  },
-  "近代史知识点": {
-    "iconName": "LiBook",
-    "iconColor": "#6ef96c"
   }
 }
