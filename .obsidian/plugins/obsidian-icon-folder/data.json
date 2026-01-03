@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiBadgeCheck",
       "LiAnvil",
       "LiBook",
       "LiAtom",
-      "LiActivitySquare",
-      "LiMessageSquareCode"
+      "LiActivitySquare"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -57,5 +57,9 @@
   "Algorithm Template": {
     "iconName": "LiCode2",
     "iconColor": "#229fec"
+  },
+  "2026 Daily Task": {
+    "iconName": "LiBadgeCheck",
+    "iconColor": "#a134ea"
   }
 }
