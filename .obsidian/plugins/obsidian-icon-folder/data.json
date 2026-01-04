@@ -42,10 +42,6 @@
     "iconName": "LiActivitySquare",
     "iconColor": "#e63333"
   },
-  "Code Study": {
-    "iconName": "LiMessageSquareCode",
-    "iconColor": "#deeb1e"
-  },
   "Algorithm": {
     "iconName": "LiMessageSquareCode",
     "iconColor": "#e32df0"
@@ -61,5 +57,9 @@
   "2026 Daily Task": {
     "iconName": "LiBadgeCheck",
     "iconColor": "#fbb1b1"
+  },
+  "Code Study": {
+    "iconName": "LiMessageSquareCode",
+    "iconColor": "#deeb1e"
   }
 }
