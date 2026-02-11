@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "LiAirplay",
       "LiBadgeCheck",
       "LiAnvil",
       "LiBook",
-      "LiAtom",
-      "LiActivitySquare"
+      "LiAtom"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -61,5 +61,6 @@
   "Code Study": {
     "iconName": "LiMessageSquareCode",
     "iconColor": "#deeb1e"
-  }
+  },
+  "题目": "LiAirplay"
 }
