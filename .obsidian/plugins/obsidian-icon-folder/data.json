@@ -6,11 +6,11 @@
     "emojiStyle": "native",
     "iconColor": null,
     "recentlyUsedIcons": [
+      "🖼",
       "LiAirplay",
       "LiBadgeCheck",
       "LiAnvil",
-      "LiBook",
-      "LiAtom"
+      "LiBook"
     ],
     "recentlyUsedIconsSize": 5,
     "rules": [],
@@ -62,5 +62,6 @@
     "iconName": "LiMessageSquareCode",
     "iconColor": "#deeb1e"
   },
-  "题目": "LiAirplay"
+  "题目": "LiAirplay",
+  "Excalidraw": "🖼"
 }
