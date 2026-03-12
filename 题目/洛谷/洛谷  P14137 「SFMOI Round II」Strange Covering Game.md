@@ -1,4 +1,3 @@
-# P14137 「SFMOI Round II」Strange Covering Game
 
 ## 题目背景
 
