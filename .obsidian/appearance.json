@@ -3,7 +3,7 @@
   "accentColor": "#933ecc",
   "monospaceFontFamily": "",
   "theme": "obsidian",
-  "translucency": false,
+  "translucency": true,
   "nativeMenus": true,
   "baseFontSize": 18
 }
