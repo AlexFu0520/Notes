@@ -1,9 +1,12 @@
 {
-  "cssTheme": "Cupertino",
-  "accentColor": "#933ecc",
+  "cssTheme": "Border",
+  "accentColor": "",
   "monospaceFontFamily": "",
-  "theme": "obsidian",
+  "theme": "moonstone",
   "translucency": true,
   "nativeMenus": true,
-  "baseFontSize": 18
+  "baseFontSize": 18,
+  "enabledCssSnippets": [],
+  "textFontFamily": "Inter",
+  "interfaceFontFamily": "Inter"
 }
