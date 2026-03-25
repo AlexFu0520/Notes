@@ -69,3 +69,53 @@ $\def\arraystretch{1.5} \begin{array}{c:c:c} \hdashline 1 & 2 & 3 \\ \hline 4 & 
 ```
 
 说明：样例解释见题目描述。
+
+
+## ACcode:
+```cpp
+
+vector<ll> a(2e5);
+ll n,m,k;
+
+ll cost(ll m) {
+    ll ans = inf;
+    for (ll i = 0 ; i < m ; ++i) {
+        ll cnt = 0;
+        for (ll j = i ; j < n ; j += m) { //遍历长度为m的这一列
+            if (a[j] != k) ++cnt;
+        }
+        ans = min(ans,cnt); //计算如果列数为m时，最小的更换次数
+    }
+    return ans;
+}
+
+void solve() {
+    ll ans = inf;
+    cin >> n >> m >> k;
+    for (int i = 0 ; i < n ; ++i) cin >> a[i];
+	
+	//情况1（jia lie）:
+    for (ll i = m ; i <= n && i - m < ans ; ++i) {
+        ans = min(ans,cost(i) + i - m);
+    }
+
+    for (ll i = m - 1 ; i > 0 && m - i < ans ; --i) {
+        ans = min(ans,cost(i) + m - i);
+    }
+    cout << ans << '\n';
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    int T = 1;
+    cin >> T;
+    while (T--) {
+        solve();   
+    }
+    return 0;
+}
+
+```
