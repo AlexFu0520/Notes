@@ -24,7 +24,7 @@ void pre(int n) {
 }
 ```
 
-## 第二种写法：
+# 第二种写法：
 ```cpp
 const int N = 1e5 + 5;
 vector<int> prime;
