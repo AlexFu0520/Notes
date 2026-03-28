@@ -38,5 +38,64 @@ $1 \leq n \leq 3e7$
 4. 最后求和即可
 ## ACcode：
 ```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+typedef long long ll;
+
+const int N = 3e7 + 10;
+int prime[N];
+int minifactor[N];
+int primepos;
+
+//欧拉筛的核心思想是：让每个质数只被它的最小质因数筛一次，从而达到 O(n)的复杂度
+void init() {
+    int tmp;
+    //从2开始遍历每个数（1没有质因数）
+    for (int i = 2 ; i < N ; ++i) {
+        //如果最小质因子未被赋值
+        //说明i没有杯更小的质数筛过，因此i本身就是质数
+        if (!minifactor[i]) {
+            prime[primepos++] = i;
+            minifactor[i] = i;
+        }
+
+        //用当前的i去筛掉更大的质数
+        //遍历已经找到的质数 prime[j] 
+        for (int j = 0 ; (tmp = i * prime[j]) < N ; ++j) {
+            
+            //核心：tmp 的最小质因子就是prime[j]
+            //因为 prime[j]是从小到大遍历的，并且是第一个能整除tmp的质数
+            minifactor[tmp] = prime[j];
+
+            //欧拉筛的灵魂：如果i能被prime[j]整除，就停止内层循环
+            if (!(i % prime[j])) break;
+        }
+    }
+}
+
+void solve() {
+    int n;
+    ll sum = 0;
+    cin >> n;
+    for (int i = 1 ; i <= n ; ++i) {
+        sum += minifactor[i];
+    }
+    cout << sum << '\n';
+}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+	
+	init();
+    int T = 1;
+    // cin >> T;
+    while (T--) {
+        solve();   
+    }
+    return 0;
+}
 
 ```
