@@ -5,7 +5,7 @@
   "theme": "moonstone",
   "translucency": true,
   "nativeMenus": true,
-  "baseFontSize": 18,
+  "baseFontSize": 20,
   "enabledCssSnippets": [],
   "textFontFamily": "Inter",
   "interfaceFontFamily": "Inter"
