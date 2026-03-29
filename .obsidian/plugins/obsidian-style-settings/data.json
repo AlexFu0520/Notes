@@ -145,5 +145,7 @@
   "Editor@@border-focus-mode": false,
   "Editor@@line-hover-indicator": true,
   "Components@@Ribbon-autohide": true,
-  "Editor@@text-align-justify": false
+  "Editor@@text-align-justify": true,
+  "Editor@@h1-divider-on": true,
+  "Editor@@h2-divider-on": false
 }
