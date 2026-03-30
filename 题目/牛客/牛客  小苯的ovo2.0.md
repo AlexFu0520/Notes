@@ -68,5 +68,81 @@ ov??ovoov
 
 ## ACcode:
 ```cpp
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+typedef long long ll;
+using namespace std;
 
+void solve() {
+    string s;
+    cin >> s;
+    int n = s.length();
+    int co = 0 ,cx = 0; //o的数量和 ？的数量
+    for (char c : s) {
+        if (c == 'o') {
+            co++;
+        }
+        else if (c == '?') {
+            cx++;
+        }
+    }
+
+    ll ans = 0;
+    for (int M = co ; M <= co + cx ; ++M) { //遍历M
+        vector<ll> dp(M + 1,-1); 
+        dp[0] = 0;
+
+        for (char c : s) {
+            if  (c == 'o') {
+                //逆序遍历j 防止重复使用同一个位置
+                for (int j = M ; j >= 0 ; --j) {
+                    if (j > 0 && dp[j - 1] != -1) {
+                        dp[j] = dp[j - 1];
+                    }
+                }
+            }
+            else if (c == 'v') {
+                for (int j = M ; j >= 0 ; --j) {
+                    if (dp[j] != -1) {
+                        dp[j] += 1ll * j * (M-  j); //该位置产生贡献
+                    }
+                }
+            }
+            else if (c == '?') {
+                for (int j = M ; j >= 0 ; --j) {
+                    //存储分别填入v和o的对应状态
+                    ll res_v = -1,res_o = -1;
+                    
+                    //该位置使用过
+                    if (dp[j] != -1) {
+                        res_v = dp[j] + 1ll * j * (M - j);
+                    }
+                    if  (j > 0 && dp[j - 1] != -1) {
+                        res_o = dp[j - 1];
+                    }
+
+                    dp[j] = max(res_v,res_o);
+                }
+            }
+            if (dp[M] != -1) {
+                ans = max(ans,dp[M]);
+            }
+        }
+    }
+    cout << ans << '\n';
+}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    int T = 1;
+    cin >> T;
+    while (T--) {
+        solve();   
+    } 
+    return 0;
+}
 ```
