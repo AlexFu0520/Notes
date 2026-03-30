@@ -146,3 +146,71 @@ int main(){
     return 0;
 }
 ```
+
+## 第二种写法Code:
+```cpp
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+typedef long long ll;
+using namespace std;
+
+
+int count(const string & s) {
+    int a = 0,b = 0;
+    int ans = 0;
+    for (char c : s) {
+        if (c == 'o') {
+            ans += b;
+            a++;
+        }
+        else {
+            b += a;
+        }
+    }
+    return ans;
+}
+void solve() {
+    string s;
+    cin >> s;
+    int n = s.length();
+    
+    //存储所有?的位置
+    vector<int> pos; 
+    for (int i = 0 ; i < n ; ++i) {
+        if (s[i] == '?') {
+            pos.push_back(i);
+            s[i] = 'o'; //先全部换为o
+        }
+    }
+
+    int ans = count(s); //计算初始方案全o的ovo数
+
+    //从第i个 ? 开始换
+    for (int i = 0 ; i < pos.size() ; ++i) {
+        //把第 i-j 个？换为v
+        for (int j = i ; j < pos.size() ; ++j) {
+            s[pos[j]] = 'v';
+            ans = max(ans,count(s)); //更新最大值
+        }
+        //重置：把 i-j 的？换回 o,恢复初始状态
+        for (int j = i ; j < pos.size() ; ++j) {
+            s[pos[j]] = 'o';
+        }
+    }
+    cout << ans << '\n';
+}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+
+    int T = 1;
+    cin >> T;
+    while (T--) {
+        solve();   
+    } 
+    return 0;
+}
+```
