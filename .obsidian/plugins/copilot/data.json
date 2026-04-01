@@ -13,7 +13,7 @@
   "azureOpenAIApiVersion": "",
   "azureOpenAIApiEmbeddingDeploymentName": "",
   "googleApiKey": "",
-  "openRouterAiApiKey": "ak_2jn8q33a95R80ir3yF4kZ5kc49b7v",
+  "openRouterAiApiKey": "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",
   "xaiApiKey": "",
   "mistralApiKey": "",
   "deepseekApiKey": "",
@@ -294,6 +294,12 @@
       "capabilities": [
         "reasoning"
       ]
+    },
+    {
+      "name": "qwen/qwen3.6-plus-preview:free",
+      "provider": "openrouterai",
+      "enabled": true,
+      "maxTokens": 128000
     }
   ],
   "activeEmbeddingModels": [
