@@ -1,7 +1,7 @@
 RNN 训练时，需在复用隐状态前[分离 (detach) 隐状态的梯度](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#ua92bd420)，以保证[序列数据训练的数值稳定性](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#WsiN2)。[一个时间步内的隐状态计算](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#ay7yj)部分已详细阐述了循环神经网络的前向传播过程——隐状态在时间步**间**循环传递。
 
 本节将进一步探讨序列模型中梯度的计算，以及 RNN 的反向传播原理与细节。
-
+![[截屏2026-04-01 19.24.19.png]]
 # <font style="background-color:#81BBF8;"> </font> RNN 中的梯度计算原理
 ## 长程梯度依赖的推导
 ### 前向传播
@@ -51,6 +51,7 @@ $$ \begin{align}{\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}}&= {\color{sa
 ## 梯度计算路径的截断策略
 限制梯度反向传播的时间跨度，以解决长程梯度依赖难题，减小计算代价、提高数值稳定性，需对 ${\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}}$ 完整梯度表达式中的求和项 $\sum\ _{i=1}^{t-1}$进行约束，这些截断策略本质上需显式或隐式地由[torch.detach()](https://www.yuque.com/tully/d2l/vmhmv5aml2byglfk#hCgzT)调用。
 
+![[截屏2026-04-01 19.24.54.png]]
 <img src="https://cdn.nlark.com/yuque/0/2025/jpeg/932482/1741352025184-a53ae3c9-80b5-4057-92d8-7a01d11494d7.jpeg" width="480" title="" crop="0,0,1,1" id="u0c027aa5" class="ne-image">
 
 ### 等距截断
