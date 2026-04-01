@@ -112,7 +112,7 @@ $$ \begin{align}\frac{\partial L}{\partial \mathbf{h}_{\color{brown} \mathfrak{t
 损失函数在任意时间步 $t$ 的梯度 $\tfrac{\partial L}{\partial \mathbf{h}_t}$，由数学归纳法得
 $$ \frac{\partial L}{\partial \mathbf{h}_t} = \sum_{i=t}^{T} \left( {\color{red} \mathbf{W}_{hh}^\top} \right)^{i - t} \mathbf{W}_{qh}^\top \frac{\partial L}{\partial \mathbf{o}_i} $$
 
-可见，对于长序列（$ T \gg 1 $时）：若$ {\color{red} \mathbf{W}_{hh}^\top} $的最大奇异值$ \sigma_{\max} $小于 1，该幂次矩阵的范数将以指数速率衰减，早期时间步的梯度贡献被抑制，直至发生梯度消失；若$ {\color{red} \mathbf{W}_{hh}^\top} $的最大奇异值$ \sigma_{\max} $大于 1，该幂次矩阵的范数将以指数速率放大，梯度的更新过程剧烈震荡，直至发生梯度爆炸。将使用[梯度计算路径的截断策略](#g3cyp)，保证训练时的数值稳定性。在更复杂的序列模型中，将有更好的机制进一步缓解这一问题。
+可见，对于长序列（$T \gg 1$时）：若 ${\color{red} \mathbf{W}_{hh}^\top}$的最大奇异值$\sigma_{\max}$小于 1，该幂次矩阵的范数将以指数速率衰减，早期时间步的梯度贡献被抑制，直至发生梯度消失；若${\color{red} \mathbf{W}_{hh}^\top}$的最大奇异值$\sigma_{\max}$大于 1，该幂次矩阵的范数将以指数速率放大，梯度的更新过程剧烈震荡，直至发生梯度爆炸。将使用[梯度计算路径的截断策略](#g3cyp)，保证训练时的数值稳定性。在更复杂的序列模型中，将有更好的机制进一步缓解这一问题。
 
 # <font style="background-color:#81BBF8;"> </font> RNN 中的关键概念比较
 |     | [**等距截断**](#DfyVY)                        | [**随机截断**](#xMzDI)                         | [**torch.detach()**]           | [**梯度裁剪**](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#cbKWq) |
