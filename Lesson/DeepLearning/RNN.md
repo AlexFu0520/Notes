@@ -1,559 +1,194 @@
-在上一章，我们探索了[卷积神经网络 (Convolutional Neural Network, CNN)](https://www.yuque.com/tully/d2l/cp2tdq0cpah4m0gg)，利用其卷积核实现的局部感知、权重共享和平移不变性，能高效处理具有局部关联性和固定空间结构的数据（特别是图像数据）。在 CNN 的监督学习任务中，为了进行有效的训练与推导，需假设所有样本都满足**独立同分布 (Independent and Identically Distributed, i.i.d.)**：每一个样本完全独立，其取值不受其他样本的影响。有助于简化参数估计，将联合概率用各样本概率乘积表示；所有样本都来自同一个未知分布。保证模型学习数据特征时的稳定性与泛化能力。但现实中相当一部分数据并不适用 i.i.d. 的假设，如：文本、音频信号、视频帧等**序列数据 (sequential data)**；气象信息、股价、销量等**时序数据 (time series data)**；描述社交与概念等关联的**网络数据 (graph data)** 等。
+RNN 训练时，需在复用隐状态前[分离 (detach) 隐状态的梯度](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#ua92bd420)，以保证[序列数据训练的数值稳定性](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#WsiN2)。[一个时间步内的隐状态计算](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#ay7yj)部分已详细阐述了循环神经网络的前向传播过程——隐状态在时间步**间**循环传递。
 
-**循环神经网络 (Recurrent Neural Network, RNN)** 就是为序列信息而生的，引入隐藏状态捕获序列的先后依赖性，结合上下文与当前输入预测未来可能的输出。本章以文本数据为例，通过学习预处理与语言模型构建方法、汲取 RNN 的设计灵感。
+本节将进一步探讨序列模型中梯度的计算，以及 RNN 的反向传播原理与细节。
 
-在介绍深度学习领域的序列模型之前，先以从 1984 年 1 月 1日到 2025 年 1 月 15 日的富时 100 指数 (FTSE 100 IDX) 数据为例，介绍两个统计学视角下较流行的序列模型。
+# <font style="background-color:#81BBF8;"> </font> RNN 中的梯度计算原理
+## 长程梯度依赖的推导
+### 前向传播
+为了清晰地展示 RNN 中梯度的计算过程，忽略隐状态特性与更新细节后，第 $t$个时间步的计算过程为：
+$$ \begin{align}h_t &= f(x_t, h_{t-1}, w_h) \\o_t &= g(h_t, w_o)\end{align} $$
 
+其中，
++ $x_t$：第 $t$ 个时间步的输入；
++ $h_t$：第 $t$ 个时间步隐状态；
++ $o_t$：第 $t$ 个时间步的输出；
++ $w_h$ ：隐藏层权重；
++ $w_o$：输出层权重；
++ $f$：隐状态更新函数；
++ $g$：输出生成函数。
 
-<img src="https://cdn.nlark.com/yuque/0/2025/png/932482/1736936084646-f81d4eb6-c860-4dcf-a0f9-f6c04b4e6c9f.png" width="800" title="" crop="0,0,1,1" id="u699720ae" class="ne-image">
+网络在各个时间步内遍历 $(x_t, h_t, o_t)$ ，由链式结构 $\{\ldots, (x_{t-1}, h_{t-1}, o_{t-1}), (x_t, h_t, o_t), \ldots\}$ 前向计算、传递信息。此时，整体的损失值 $L$ 是各时间步损失 $l$的均值：
+$$ L(x_1, \ldots, x_T, y_1, \ldots, y_T, w_h, w_o) = \frac{\sum_{t=1}^T l(o_t, y_t)}{T} $$
 
+### 反向传播
+在随后的反向传播过程中，需要计算损失函数$ L $对所有参数的梯度：
 
-设富时 100 指数图的横轴用离散的正整数表示时间$t \in \mathbb{Z}^{+}$ $，纵轴为价格$ $y$ 。需根据已有的历史数据，设计一个统计学模型，预测给定的时间 $t$ 位置股价的条件概率分布：
-$$y_{t} \sim P (y_{t} \mid y_{t - 1}, \ldots, y_{1})$$
++ **输出层权重**$ w_o $**的梯度**。输出$ o_t $仅与当前隐状态$ h_t $和$ w_o $有关，不需要沿时间步展开，计算简单：
 
-若考虑全序列的联合概率分布，由链式法则有：
+$ \begin{align}
+\frac{\partial L}{\partial w_o}
+&= \frac{1}{T} \sum_{t=1}^T \frac{\partial l(o_t, y_t)}{\partial w_o}  \\
+&= \frac{1}{T} \sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial o_t}{\partial w_o}\right)  \\
+&= \frac{1}{T} \sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial g(h_t, w_o)}{\partial w_o}\right)
+\end{align} $
 
-$\begin{align}P(y_1, \ldots, y_T)&= P(y_1) \cdot P(y_2|y_1) \cdot P(y_3|y_2, y_1) \cdot \ldots \cdot P(y_T|y_{T-1}, \ldots, y_1)\\&=\prod_{t=1}^{T} P (y_{t} \mid y_{t - 1}, \ldots, y_{1})\end{align}$
+> 输出层权重$ w_o $（以及其他参数）的梯度计算方法与前馈神经网络的梯度计算方法一致，无时间步的递归。
+>
 
-+ 虽然在纯数学的角度，概率分布可反向写作 $P(y_1, \ldots, y_T) = \prod_{t=T}^1 P (y_t \mid y_{t+1}, \ldots, y_T)$ ，但在实际问题中，序列通常是从过去指向未来的矢量。于是，从因果关系的角度，默认前向进行解释和预测；
-+ 股价 $y_t$ 与之前所有时间步的历史状态 $y_{t - 1}, \ldots, y_{1}$ 有关；
-+ 不适合用[回归模型](https://www.yuque.com/tully/d2l/gx7xgwt9alvybb4l)预测序列数据，因为时间步越大，所需历史状态的数据量也越庞大，模型低效。通常引入新的假设求上述条件概率的近似解。  
-#  自回归模型
++ **隐藏层权重**$ w_h $**的梯度**：
 
-**自回归 (AutoRegressive, AR) 模型**假设股价 $y_t$ 仅依赖于从时间 $t$ 开始回溯的 $\tau$ 个有限时间步的值，则股价的条件概率可近似表示为：
-$$y_t \sim P(y_t \mid y_{t-1}, y_{t-2}, \ldots, y_{t-\tau})$$
-  
-此时，$y_t$ 的自回归模型预测值为：
-$$\begin{align}y_t&= \phi_1 y_{t-1} + \phi_2 y_{t-2} + \ldots + \phi_\tau y_{t-\tau} + \epsilon_t \\&= \sum_{i=1}^{\tau} \phi_i y_{t-i} + \epsilon_t\end{align}$$
-其中：
-+ $\tau$ ：自回归模型的阶数（历史窗口长度），表示将 $\tau$ 个最近的历史数据纳入对当前时间步的预测；
-+ $\phi_i$ ：自回归模型的参数，表示第 $i$ 个历史数据对当前值的权重；
-+ $\epsilon_t$ ：暂不能用自回归模型解释的随机误差。彼此独立，$\epsilon_t \sim N(0, \sigma^2)$。
+$ \begin{align}
+\frac{\partial L}{\partial w_h}
+&= \frac{1}{T}\sum_{t=1}^T \frac{\partial l(o_t, y_t)}{\partial w_h}  \\
+&= \frac{1}{T}\sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial o_t}{\partial h_t} \cdot {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \right) \\
+&= \frac{1}{T}\sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial g(h_t, w_o)}{\partial h_t} \cdot {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \right) \\
+\end{align} $
 
-这里列举 3 种常用的确定模型的阶数 $\tau$ 的方法：
-1. 若已积累足够的领域知识时，可直接根据数据特性手动设置 $\tau$ 值；
-2. 用可视化的方式观察自相关函数 (AutoCorrelation Function, ACF) 图和偏自相关函数 (Partial Autocorrelation Function, PACF) 的截断点，选择合适的 $\tau$ 值；
-3. 使用赤池信息准则 (Akaike Information Criterion, AIC) 或贝叶斯信息准则 (Bayesian Information Criterion, BIC) 选择合适的 $\tau$ 值。
+在隐藏层权重$ w_h $的梯度计算的乘积累加过程中，损失函数对输出的偏导数$ \tfrac{\partial l(o_t, y_t)}{\partial o_t} $和输出函数对隐藏状态的偏导数$ \tfrac{\partial g(h_t, w_o)}{\partial h_t} $都很好计算。在数学表示上，需要用全导数$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $表示隐藏层权重$ w_h $对隐状态$ h_t $的全部影响（梯度在时间维度上的累积效应），而隐状态与权重有递归的依赖关系（$ h_t = f(x_t, h_{t-1}, w_h) $）。这里，$ w_h $对$ h_t $的全部影响来自两条路径：
 
-随后用最小二乘法 (Ordinary Least Squares, OLS) 估计模型最优的参数 $\phi_i$ ：
-$$\arg \min_{\phi_i} \sum_{t=\tau+1}^{T} \left(y_t - \sum_{i=1}^\tau \phi_i y_{t-i}\right)^2$$
+1. 当前时间步隐状态$ h_t $对权重$ w_h $的**直接依赖**；
+2. 权重$ w_h $影响上一个时间步的隐状态$ h_{t-1} $后，**递归依赖**地影响当前时间步的隐状态$ h_t $。
 
-这样，就可以使用自回归模型单步预测了。也可以递归地预测多步。
+因此，$ w_h $对$ h_t $的全导数$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $表示为：
 
-> 自回归模型简单、高效、可解释性强，但其容量有限，难以捕捉非线性关系，只适合较短趋势的建模。
+$ \begin{align}
+{\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}}
+&= {\color{salmon} \underbrace{\frac{\partial h_t}{\partial w_h}}_{\text{直接依赖项}}} + {\color{royalblue} \underbrace{\frac{\partial h_t}{\partial h_{t-1}} \cdot \frac{\mathrm{d} h_{t-1}}{\mathrm{d} w_h}}_{\text{递归依赖项}}} \quad {\color{Gray} \text{\scriptsize （链式法则分解）}}  \\
+&= {\color{salmon} \frac{\partial f(x_t,h_{t-1},w_h)}{\partial w_h}} + {\color{royalblue} \frac{\partial f(x_t,h_{t-1},w_h)}{\partial h_{t-1}} \cdot \frac{\mathrm{d} h_{t-1}}{\mathrm{d} w_h}}  \\
+&= \frac{\partial f_t}{\partial w_h} + \frac{\partial f_t}{\partial h_{t-1}} \frac{\partial f_{t-1}}{\partial w_h} + \frac{\partial f_t}{\partial h_{t-1}} \frac{\partial f_{t-1}}{\partial h_{t-2}} \frac{\partial f_{t-2}}{\partial w_h} + \cdots + \left( \prod_{j=2}^t \frac{\partial f_j}{\partial h_{j-1}} \right) \frac{\partial f_1}{\partial w_h} \quad {\color{Gray} \scriptsize \text{（递归展开到 }t_1\text{）}}  \\
+&= {\color{salmon} \frac{\partial f_t}{\partial w_h}} + {\color{royalblue} \sum_{i=1}^{t-1} \left( \prod_{j=i+1}^t \frac{\partial f(x_j, h_{j-1}, w_h)}{\partial h_{j-1}}\right) \cdot \frac{\partial f(x_i, h_{i-1}, w_h)}{\partial w_h}} \quad {\color{Gray} \text{\scriptsize（递归依赖项求和）}}
+\end{align} $
 
-当[自回归模型](#Xdfti)单纯且有限的历史窗口无法有效捕捉复杂且隐式的依赖时，需要引入**隐变量** $h_t$ 概括历史信息中未被直接观测到的部分，而不直接依赖历史值。
+其中，
 
-时间步位置的隐藏状态 $h_t$ 可以用函数 $g$ 从上一个时间步的隐藏状态 $h_{t-1}$ 和观测值 $y_{t-1}$ 映射得到：
-$$h_t = g(h_{t-1}, y_{t-1})$$
++ $ i \in \{1, 2, \ldots, t-1\} $：梯度贡献的起始时间步索引（历史依赖）；
++ $ j \in \{i+1, i+2, \ldots, t\} $：连乘项索引（传播路径）；
++ 特别地，当$ t=1 $时，$ h_0 $与$ w_h $无关连乘项退化为 1：$ {\color{Firebrick}\frac{\mathrm{d} h_1}{\mathrm{d} w_h}} = \frac{\partial f(x_1, h_0, w_h)}{\partial w_h} $。
 
-于是，当前时间步的预测值 $y_t$ 可由函数 $f$ 从其隐藏状态 $h_t$ 映射得到。 $\epsilon_t$ 彼此独立，$\epsilon_t \sim N(0, \sigma^2)$ ：$$ y_t = f(h_t) + \epsilon_t $$
-由于隐藏状态不可见，无法用最小二乘法得到最优参数的解析解，需用极大似然估计法等方法迭代拟合模型参数与隐藏状态。
-# <font style="background-color:#81BBF8;"> </font> 马尔可夫模型
+每个历史时间步的权重梯度贡献$ \tfrac{\partial f_i}{\partial w_h} $与连乘项$ \prod\ _{j=i+1}^t \tfrac{\partial f_j}{\partial h_{j-1}} $共同产生梯度累积效应，通过后续时间步的隐状态传播到当前时间步$ t $。
 
-实际上，用最近的一段历史（而不是全部历史）估计近似概率分布的思想满足了**马尔可夫模型 (Markov Model)** 成立的条件。即，当前状态 $x_t$ 仅依赖于最近的 $\tau$ 个状态，而与更早的历史状态无关。
+虽然$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $在理论上满足可计算性，但完成计算的复杂度很高，为$ \mathcal{O} (T^2) $。特别是当$ T $很长时，初始条件的微小变化将对结果产生巨大影响：当$ \left| \tfrac{\partial f_j}{\partial h_{j-1}}\right| \gg 1 $时，将诱发梯度爆炸，当$ \left| \tfrac{\partial f_j}{\partial h_{j-1}}\right| \ll 1 $，将诱发梯度消失。这需要我们适时截断梯度计算的路径，控制依赖项的展开长度。
 
-当 $\tau = 1$ 时，一阶马尔可夫模型中$ y_t $的概率分布：
+## 梯度计算路径的截断策略
+限制梯度反向传播的时间跨度，以解决长程梯度依赖难题，减小计算代价、提高数值稳定性，需对$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $完整梯度表达式中的求和项$ \sum\ _{i=1}^{t-1} $进行约束，这些截断策略本质上需显式或隐式地由`[torch.detach()](https://www.yuque.com/tully/d2l/vmhmv5aml2byglfk#hCgzT)`调用。
 
-  
+<img src="https://cdn.nlark.com/yuque/0/2025/jpeg/932482/1741352025184-a53ae3c9-80b5-4057-92d8-7a01d11494d7.jpeg" width="480" title="" crop="0,0,1,1" id="u0c027aa5" class="ne-image">
 
-$ P(y_t \mid y_{t-1}) $
+### 等距截断
+等距截断策略以最近的$ \tau $个时间步为**固定窗口**，仅计算$ \sum\ _{i=\max(1, t-\tau)}^{t-1} $（注意避免索引越界），使模型忽略长于$ \tau $个时间步的历史依赖，计算复杂度为$ \mathcal{O} (\tau T) $。等距截断近似法的表达式为：
 
-  
+$ {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \approx {\color{salmon} \frac{\partial f_t}{\partial w_h}} + \sum_{i=\max(1, t-\tau)}^{t-1} \left( \prod_{j=i+1}^t \frac{\partial f_j}{\partial h_{j-1}}\right) \cdot \frac{\partial f_i}{\partial w_h} $
 
-当$ y_{t-1} $已知时，可直接估计$ P(y_{t + 1} \mid y_{t - 1}) $：
+多数任务的建模本就偏向于短期依赖，等距截断策略通过固定求和的次数，显式地控制了计算范围。虽然一定程度地牺牲了理论精度，但特别适合稳定并行地处理等长序列。该策略也成为了 PyTorch、TensorFlow 等主流深度学习框架的默认实现。
 
-  
+### 随机截断
+随机截断策略用**保留概率**$ \pi_t $控制梯度回溯时每个时间步不被截断的可能性，同时向每个历史依赖引入能缩放各时间步梯度的**补偿权重**$ \xi_t \in \{0, \pi_t^{-1}\} $，使计算复杂度降低至$ \mathcal{O}(\tfrac{T}{1-\pi}) $。其中：
+
+$ \begin{cases}
+P(\xi_{t} = 0) &= 1 - \pi_{t}\\
+P(\xi_{t} = \pi_{t}^{-1}) &= \pi_{t}
+\end{cases} $
+
+$ \begin{align}
+E[\xi_t]
+&= 0 \times (1-\pi_t) + \pi_{t}^{-1} \times \pi_t  \\
+&\equiv 1
+\end{align} $
+
+$ \xi_t = \pi_t^{-1} $时，当前时间步的梯度能被回溯；$ \xi_t = 0 $时，梯度传播在当前时间步截断。一方面，引入的随机性既避免了模型训练时对特定历史信息的过度依赖，可动态调整梯度回溯路径，提升了模型泛化能力；另一方面，权重概率的设计也使每次梯度传播的期望值恒定，不对梯度的总贡献产生偏差。随机截断近似法的表达式为：
+
+$ {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \approx {\color{salmon} \frac{\partial f_t}{\partial w_h}} + \sum_{i=1}^{t-1} \left( \prod_{j=i+1}^t \xi_j \cdot \frac{\partial f_j}{\partial h_{j-1}} \right) \cdot \frac{\partial f_i}{\partial w_h} $
+
+随机截断策略通过概率模型减轻了长程依赖的影响，用补偿权重限制了长路径出现的概率。但随机性产生了额外噪声，且保留概率$ \pi_t $的调度策略往往收益有限，使该策略只适用于长序列建模任务的探索性优化。
+
+# <font style="background-color:#81BBF8;"> </font> 沿时间步反向传播的细节实现
+总地来说，RNN 的梯度计算过程被称为**沿时间步的反向传播 (back propagation through time, BPTT)**，计算图沿时间步展开为长序列，使梯度像前馈神经网络一样通过[链式法则](https://www.yuque.com/tully/d2l/vmhmv5aml2byglfk#FUkoJ)得到。由于 RNN 在所有时间步中共享一套参数，最终用于参数更新的总梯度是全部时间步的梯度累加。
+
+## 生成计算图
+对于无偏置项、使用恒等映射函数$ \phi(x) = x $激活的 RNN，第$ t $个时间步的计算过程为：
 
 $ \begin{aligned}
-
-P(y_{t+1} \mid y_{t-1})
-
-&= \frac{P(y_{t+1},\,y_{t-1})}{P(y_{t-1})}
-
-\quad && \text{\scriptsize[条件概率公式]}\\
-
-&= \frac{\sum_{y_t} P(y_{t+1},\,y_t,\,y_{t-1})}{P(y_{t-1})}
-
-\quad && \text{\scriptsize[对 $y_t$ 进行求和（边缘化）]}\\
-
-&= \frac{\sum_{y_t} P\bigl(y_{t+1}\mid y_t,\;y_{t-1}\bigr)\,P(y_t,\,y_{t-1})}{P(y_{t-1})}
-
-\quad && \text{\scriptsize[联合概率分解]}\\
-
-&= \frac{\sum_{y_t} P\bigl(y_{t+1}\mid y_t\bigr)\,P(y_t\mid y_{t-1})\,P(y_{t-1})}{P(y_{t-1})}
-
-\quad && \text{\scriptsize[一阶马尔可夫及二元分解]}\\
-
-&= \sum_{y_t} P\bigl(y_{t+1}\mid y_t\bigr)\,P(y_t\mid y_{t-1})
-
-\quad && \text{\scriptsize[抵消 $P(y_{t-1})$，完成推导]}
-
+\mathbf{h}_t &= \mathbf{W}_{hx} \mathbf{x}_t + \mathbf{W}_{hh} \mathbf{h}_{t-1} \\
+\mathbf{o}_t &= \mathbf{W}_{qh} \mathbf{h}_t 
 \end{aligned} $
 
-  
+其中，单个样本输入为$ \mathbf{x}_t \in \mathbb{R}^d $，输出为$ y_t $，$ \mathbf{W}_{hx} \in \mathbb{R}^{h \times d} $、$ \mathbf{W}_{hh} \in \mathbb{R}^{h \times h} $和$ \mathbf{W}_{qh} \in \mathbb{R}^{q \times h} $分别表示当前输入的隐状态权重、上一时间步的隐状态权重以及输出的隐状态权重。各个时间步的损失函数为$ l(\mathbf{o}_t, y_t) $，则整体损失值为：
 
-由此推广，可用动态规划的方式一步步计算多个历史范围的概率分布：
+$ L = \frac{\sum _{t=1}^T l(\mathbf{o}_t, y_t)}{T} $
 
-  
+RNN 计算图在第 3 个时间步时，隐状态$ \mathbf{h}_3 $由输入$ \mathbf{x}_3 $、权重$ \mathbf{W}_{hx} $和$ \mathbf{W}_{hh} $以及上一时间步的隐状态$ \mathbf{h}_2 $共同决定。变量与权重参数$ \mathbf{W} $的计算图依赖关系如下：
 
-$ P(y_{t+k} \mid y_{t})
+<img src="https://cdn.nlark.com/yuque/0/2025/svg/932482/1741435307611-fc45cc42-d5ef-42f0-8d91-6ecea53d0095.svg" width="400" title="用紫色圆表示运算" crop="0,0,1,1" id="u9319733d" class="ne-image">
 
-= \sum_{y_{t+1}} \sum_{y_{t+2}} \cdots \sum_{y_{t+k-1}}
+## 梯度计算
+模型训练的目的是通过优化过程得到合适的权重参数，使得模型能有效地从输入映射到输出（最小化整体损失）。需沿箭头反方向遍历上述计算图，计算并存储参数$ \mathbf{W} $相对于总体损失$ L $的梯度$ \color{royalblue} \tfrac{\partial L}{\partial \mathbf{W}_{qh}} $、$ \color{cadetblue} \tfrac{\partial L}{\partial \mathbf{W}_{hx}} $和$ \color{slateblue} \tfrac{\partial L}{\partial \mathbf{W}_{hh}} $，为优化算法提供调整参数大小的“方向”。
 
-\prod_{j=t}^{t+k-1} P\bigl(y_{j+1}\mid y_j\bigr) $
+> 与[前向传播、计算图和反向传播](https://www.yuque.com/tully/d2l/zs0vn4xd9yykw34o#BzkOe)一节类似，这里的计算同样采用通用的矩阵、向量或标量乘法。现代深度学习框架会自动缓存中间变量，避免重复计算。
+>
 
-  
+### 损失函数对于权重的梯度
+计算损失函数$ L $对于权重$ \mathbf{W}_{qh} $的梯度：
 
-# <font style="background-color:#81BBF8;"> </font> 实践
+$ \begin{align}
+\color{royalblue} \frac{\partial L}{\partial \mathbf{W}_{qh}}
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{o}_t} \cdot \frac{\partial \mathbf{o}_t}{\partial \mathbf{W}_{qh}} \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{o}_t} \cdot \frac{\partial \mathbf{W}_{qh} \cdot \mathbf{h}_t }{\partial \mathbf{W}_{qh}} \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{o}_t} \mathbf{h}_t^\top
+\end{align} $
 
-## 模拟数据生成
+计算损失函数$ L $对于权重$ \mathbf{W}_{hx} $的梯度：
 
-首先在正弦函数$ \sin(0.01 \cdot t) $上添加噪声$ \epsilon \sim N(0, 0.2^2) $模拟一段序列数据（设历史窗口$ \tau $大小为 4）：
+$ \begin{align}
+\color{cadetblue} \frac{\partial L}{\partial \mathbf{W}_{hx}}
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \frac{\partial \mathbf{h}_t}{\partial \mathbf{W}_{hx}} \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \frac{\partial (\mathbf{W}_{hx} \mathbf{x}_t + \mathbf{W}_{hh} \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hx}} \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \left(\frac{\partial \mathbf{W}_{hx} \mathbf{x}_t}{\partial \mathbf{W}_{hx}} + \frac{\partial \mathbf{W}_{hh} \mathbf{h}_{t-1}}{{\partial \mathbf{W}_{hx}}}\right)  \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \left(\mathbf{x}_t^\top + 0 \right) \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \mathbf{x}_t^\top
+\end{align} $
 
-  
+计算损失函数$ L $对于权重$ \mathbf{W}_{hh} $的梯度：
 
-```python
+$ \begin{align}
+\color{slateblue} \frac{\partial L}{\partial \mathbf{W}_{hh}}
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \frac{\partial \mathbf{h}_t}{\partial \mathbf{W}_{hh}} \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \frac{\partial (\mathbf{W}_{hx} \mathbf{x}_t + \mathbf{W}_{hh} \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} \\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \left (\frac{\partial \mathbf{W}_{hx} \mathbf{x}_t }{\partial \mathbf{W}_{hh}} + \frac{\partial \mathbf{W}_{hh} \mathbf{h}_{t-1}}{\partial \mathbf{W}_{hh}}\right )\\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \cdot \left (0 + \mathbf{h}_{t-1}^\top\right )\\
+&= \sum_{t=1}^T \frac{\partial L}{\partial \mathbf{h}_t} \mathbf{h}_{t-1}^\top
+\end{align} $
 
-import torch
+### 损失函数对于隐状态的梯度
+对于最后一个时间步$ T $，损失函数$ L $仅通过$ \mathbf{o}_{T} $依赖于隐状态$ \mathbf{h}_{T} $。于是，损失函数对于最后一个时间步隐状态的梯度$ \tfrac{\partial L}{\partial \mathbf{h}_T} $为：
 
-from matplotlib import pyplot as plt
+$ \begin{align}
+\frac{\partial L}{\partial \mathbf{h}_T}
+&= \frac{\partial L}{\partial \mathbf{o}_T} \cdot \frac{\partial \mathbf{o}_T}{\partial \mathbf{h}_T}  \\
+&= \frac{\partial L}{\partial \mathbf{o}_T} \cdot \frac{\partial \mathbf{W}_{qh} \mathbf{h}_T}{\partial \mathbf{h}_T}  \\
+&= \frac{\partial L}{\partial \mathbf{o}_T}\mathbf{W}_{qh}^\top
+\end{align} $
 
-  
+对于时间步$ {\color{brown} \mathfrak{t}}<T $，损失函数$ L $同时通过$ \mathbf{o}_{{\color{brown} \mathfrak{t}}} $和$ \mathbf{h}_{{\color{brown} \mathfrak{t}}+1} $依赖于隐状态$ \mathbf{h}_{{\color{brown} \mathfrak{t}}} $。于是，损失函数对于$ {\color{brown} \mathfrak{t}}<T $时间步隐状态的梯度$ \tfrac{\partial L}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}} $为：
 
-sample_size = 1000
+$ \begin{align}
+\frac{\partial L}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}}
+&= \frac{\partial L}{\partial \mathbf{o}_{\color{brown} \mathfrak{t}}} \cdot \frac{\partial \mathbf{o}_{\color{brown} \mathfrak{t}}}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}} + \frac{\partial L}{\partial \mathbf{h}_{{\color{brown} \mathfrak{t}}+1}} \cdot \frac{\partial \mathbf{h}_{{\color{brown} \mathfrak{t}}+1}}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}}  \\
+&= \frac{\partial L}{\partial \mathbf{o}_{\color{brown} \mathfrak{t}}} \cdot \frac{\partial \mathbf{W}_{qh}\mathbf{h}_{{\color{brown} \mathfrak{t}}}}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}} + \frac{\partial L}{\partial \mathbf{h}_{{\color{brown} \mathfrak{t}}+1}} \cdot \frac{\partial (\mathbf{W}_{hx} \mathbf{x}_{{\color{brown} \mathfrak{t}}+1} + \mathbf{W}_{hh} \mathbf{h}_t)}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}}  \\
+&= \frac{\partial L}{\partial \mathbf{o}_{\color{brown} \mathfrak{t}}} \cdot \mathbf{W}_{qh}^\top + \frac{\partial L}{\partial \mathbf{h}_{{\color{brown} \mathfrak{t}}+1}} \cdot \left(\frac{\partial \mathbf{W}_{hx} \mathbf{x}_{{\color{brown} \mathfrak{t}}+1}}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}} + \frac{\partial \mathbf{W}_{hh} \mathbf{h}_{\color{brown} \mathfrak{t}}}{\partial \mathbf{h}_{\color{brown} \mathfrak{t}}}\right)  \\
+&= \frac{\partial L}{\partial \mathbf{o}_{\color{brown} \mathfrak{t}}} \cdot \mathbf{W}_{qh}^\top + \frac{\partial L}{\partial \mathbf{h}_{{\color{brown} \mathfrak{t}}+1}} \cdot \left(0 + \mathbf{W}_{hh}^\top \right)  \\
+&= \frac{\partial L}{\partial \mathbf{o}_{\color{brown} \mathfrak{t}}}\mathbf{W}_{qh}^\top + \frac{\partial L}{\partial \mathbf{h}_{{\color{brown} \mathfrak{t}}+1}}\mathbf{W}_{hh}^\top
+\end{align} $
 
-tau = 4 # 历史窗口大小
+损失函数在任意时间步$ t $的梯度$ \tfrac{\partial L}{\partial \mathbf{h}_t} $，由数学归纳法得：
 
-  
+$ \frac{\partial L}{\partial \mathbf{h}_t} = \sum_{i=t}^{T} \left( {\color{red} \mathbf{W}_{hh}^\top} \right)^{i - t} \mathbf{W}_{qh}^\top \frac{\partial L}{\partial \mathbf{o}_i} $
 
-time_steps = torch.arange(start=1, end=sample_size + tau + 1, dtype=torch.float)
+可见，对于长序列（$ T \gg 1 $时）：若$ {\color{red} \mathbf{W}_{hh}^\top} $的最大奇异值$ \sigma_{\max} $小于 1，该幂次矩阵的范数将以指数速率衰减，早期时间步的梯度贡献被抑制，直至发生梯度消失；若$ {\color{red} \mathbf{W}_{hh}^\top} $的最大奇异值$ \sigma_{\max} $大于 1，该幂次矩阵的范数将以指数速率放大，梯度的更新过程剧烈震荡，直至发生梯度爆炸。将使用[梯度计算路径的截断策略](#g3cyp)，保证训练时的数值稳定性。在更复杂的序列模型中，将有更好的机制进一步缓解这一问题。
 
-values = torch.sin(time_steps * 0.01) + torch.normal(mean=0.0, std=0.2, size=(sample_size + tau,))
+# <font style="background-color:#81BBF8;"> </font> RNN 中的关键概念比较
+|  | [**等距截断**](#DfyVY) | [**随机截断**](#xMzDI) | `[**torch.detach()**](https://www.yuque.com/tully/d2l/vmhmv5aml2byglfk#hCgzT)` | [**梯度裁剪**](https://www.yuque.com/tully/d2l/gez7tdq4dzgtvkwq#cbKWq) |
+| :---: | --- | --- | --- | --- |
+| 目标 | 降低计算复杂度 | 降低计算复杂度，且保持梯度估计的无偏性 | 显式地截断梯度流，丢弃对历史梯度依赖，避免不必要的梯度计算 | 抑制梯度爆炸 |
+| 策略 | 将梯度反向传播的时间步跨度限制在固定大小的窗口内（需在窗口结束位置显式截断梯度流） | 用概率决定反向传播在各时间步回溯的可能性，用权重补偿梯度的期望（不必手动操作梯度流） | 以共享内存的方式返回一个新的张量，但新张量从当前计算图中分离 | 在参数更新前用梯度的范数约束梯度的数值范围，但不影响梯度流 |
+| 场景 | 广泛的序列模型训练实践 | 长程依赖建模探索 | 手动干预梯度流 | 保证 RNN 的训练稳定 |
 
-  
-
-plt.figure(figsize=(10, 5))
-
-plt.plot(time_steps, values, label='Sine Wave with Noise')
-
-plt.xlabel('time_steps')
-
-plt.ylabel('values')
-
-plt.legend()
-
-plt.grid()
-
-plt.show()
-
-```
-
-  
-
-<img src="https://cdn.nlark.com/yuque/0/2025/png/932482/1737026057701-97c06200-9130-403f-b184-a6fc80d389a3.png" width="640" title="" crop="0,0,1,1" id="ucf1364cb" class="ne-image">
-
-  
-
-将`values`序列转换为用于监督模型的特征-标签对的形式：
-
-  
-
-```python
-
-import torch
-
-  
-
-sample_size = 1000
-
-tau = 4 # 历史窗口大小
-
-  
-
-time_steps = torch.arange(start=1, end=sample_size + tau + 1, dtype=torch.float)
-
-values = torch.sin(time_steps * 0.01) + torch.normal(mean=0.0, std=0.2, size=(sample_size + tau,))
-
-  
-
-features = torch.stack([values[i:i + tau] for i in range(sample_size)], dim=0)
-
-labels = values[tau:]
-
-  
-
-print(f'{features.shape = }')
-
-print(f'{labels.shape = }')
-
-```
-
-  
-
-```plain
-
-features.shape = torch.Size([1000, 4])
-
-labels.shape = torch.Size([1000])
-
-```
-
-  
-
-## 模型训练
-
-构建一个具有两个全连接层的 MLP，模型训练如下：
-
-  
-
-```python
-
-import torch
-
-from torch import nn, Tensor, optim
-
-from torch.utils.data import DataLoader, TensorDataset
-
-  
-  
-
-def generate_data_from_sin(mean: float, std: float, size: int, tau: int) -> tuple[Tensor, Tensor]:
-
-time_steps = torch.arange(start=1, end=size + tau + 1, dtype=torch.float)
-
-values = torch.sin(time_steps * 0.01) + torch.normal(mean, std, size=(size + tau,))
-
-  
-
-return time_steps, values
-
-  
-  
-
-def get_features_and_labels(values: Tensor, size: int, tau: int) -> tuple[Tensor, Tensor]:
-
-features = torch.stack([values[i:i + tau] for i in range(size)], dim=0)
-
-labels = values[tau:]
-
-  
-
-return features, labels
-
-  
-  
-
-def get_dataloader(features: Tensor, labels: Tensor, train_size: int, batch_size: int) -> tuple[DataLoader[tuple[Tensor, ...]], DataLoader[tuple[Tensor, ...]]]:
-
-train_dataset = TensorDataset(features[:train_size], labels[:train_size])
-
-valid_dataset = TensorDataset(features[train_size:], labels[train_size:])
-
-  
-
-return DataLoader(train_dataset, batch_size, shuffle=True), DataLoader(valid_dataset, batch_size)
-
-  
-  
-
-sample_size = 1000
-
-tau = 4
-
-epochs = 5
-
-lr = 0.01
-
-  
-
-# 模型、损失函数、优化器
-
-net = nn.Sequential(
-
-nn.Linear(4, 10), nn.ReLU(),
-
-nn.Linear(10, 1)
-
-)
-
-loss_fn = nn.MSELoss()
-
-optimizer = optim.Adam(net.parameters(), lr)
-
-  
-
-# 数据生成
-
-time_steps, values = generate_data_from_sin(mean=0.0, std=0.2, size=sample_size, tau=tau)
-
-features, labels = get_features_and_labels(values=values, size=sample_size, tau=tau)
-
-train_loader, valid_loader = get_dataloader(features, labels, train_size=int(0.8 * sample_size), batch_size=16)
-
-  
-
-# 训练与评估
-
-for epoch in range(epochs):
-
-net.train()
-
-train_loss_accu = 0
-
-for batch_features, batch_labels in train_loader:
-
-optimizer.zero_grad()
-
-predictions = net(batch_features)
-
-loss = loss_fn(predictions.squeeze(), batch_labels)
-
-loss.backward()
-
-optimizer.step()
-
-train_loss_accu += loss.item()
-
-  
-
-net.eval()
-
-valid_loss_accu = 0
-
-with torch.no_grad():
-
-for batch_features, batch_labels in valid_loader:
-
-predictions = net(batch_features)
-
-loss = loss_fn(predictions.squeeze(), batch_labels)
-
-valid_loss_accu += loss.item()
-
-  
-
-train_loss = train_loss_accu / len(train_loader)
-
-valid_loss = valid_loss_accu / len(valid_loader)
-
-print(f"第 {epoch + 1}/{epochs} 轮，训练损失：{train_loss :.4f}，测试损失：{valid_loss :.4f}")
-
-```
-
-  
-
-```plain
-
-第 1/5 轮，训练损失：0.1081，测试损失：0.0414
-
-第 2/5 轮，训练损失：0.0537，测试损失：0.0419
-
-第 3/5 轮，训练损失：0.0522，测试损失：0.0417
-
-第 4/5 轮，训练损失：0.0524，测试损失：0.0390
-
-第 5/5 轮，训练损失：0.0512，测试损失：0.0404
-
-```
-
-  
-
-## 模型评估
-
-获得以上训练好的模型`net`后，可传入多组（这里是每组 4 个）历史值以预测下一个值——**单步预测 (one-step-ahead prediction)**。或者从一组历史值开始，每次（k 次）将预测到的值追加为最新的历史值、弹出超过窗口大小的最旧的历史值进行**多步预测 (k-step-ahead prediction)**。预测结果的可视化展示如下：
-
-  
-
-```python
-
-import torch
-
-from matplotlib import pyplot as plt
-
-from torch import nn, Tensor, optim
-
-from torch.utils.data import DataLoader, TensorDataset
-
-  
-  
-
-def generate_data_from_sin(mean: float, std: float, size: int, tau: int) -> tuple[Tensor, Tensor]:
-
-time_steps = torch.arange(start=1, end=size + tau + 1, dtype=torch.float)
-
-values = torch.sin(time_steps * 0.01) + torch.normal(mean, std, size=(size + tau,))
-
-  
-
-return time_steps, values
-
-  
-  
-
-def get_features_and_labels(values: Tensor, size: int, tau: int) -> tuple[Tensor, Tensor]:
-
-features = torch.stack([values[i:i + tau] for i in range(size)], dim=0)
-
-labels = values[tau:]
-
-  
-
-return features, labels
-
-  
-  
-
-def get_dataloader(features: Tensor, labels: Tensor, train_size: int, batch_size: int) -> tuple[DataLoader[tuple[Tensor, ...]], DataLoader[tuple[Tensor, ...]]]:
-
-train_dataset = TensorDataset(features[:train_size], labels[:train_size])
-
-valid_dataset = TensorDataset(features[train_size:], labels[train_size:])
-
-  
-
-return DataLoader(train_dataset, batch_size, shuffle=True), DataLoader(valid_dataset, batch_size)
-
-  
-  
-
-def multi_step_predict(features: Tensor, step_begin: int, step_num: int) -> Tensor:
-
-data = features[step_begin]
-
-result = []
-
-for i in range(step_num):
-
-predicted = net(data).detach()
-
-result.append(predicted.squeeze())
-
-data = torch.cat((data[1:], predicted), dim=0)
-
-return torch.stack(result)
-
-  
-  
-
-sample_size = 1000
-
-tau = 4
-
-epochs = 5
-
-lr = 0.01
-
-  
-
-# 模型、损失函数、优化器
-
-net = nn.Sequential(
-
-nn.Linear(4, 10), nn.ReLU(),
-
-nn.Linear(10, 1)
-
-)
-
-loss_fn = nn.MSELoss()
-
-optimizer = optim.Adam(net.parameters(), lr)
-
-  
-
-# 数据生成
-
-time_steps, values = generate_data_from_sin(mean=0.0, std=0.2, size=sample_size, tau=tau)
-
-features, labels = get_features_and_labels(values=values, size=sample_size, tau=tau)
-
-train_loader, valid_loader = get_dataloader(features, labels, train_size=int(0.8 * sample_size), batch_size=16)
-
-  
-
-# 训练与评估
-
-for epoch in range(epochs):
-
-net.train()
-
-train_loss_accu = 0
-
-for batch_features, batch_labels in train_loader:
-
-optimizer.zero_grad()
-
-predictions = net(batch_features)
-
-loss = loss_fn(predictions.squeeze(), batch_labels)
-
-loss.backward()
-
-optimizer.step()
-
-train_loss_accu += loss.item()
-
-  
-
-net.eval()
-
-valid_loss_accu = 0
-
-with torch.no_grad():
-
-for batch_features, batch_labels in valid_loader:
-
-predictions = net(batch_features)
-
-loss = loss_fn(predictions.squeeze(), batch_labels)
-
-valid_loss_accu += loss.item()
-
-  
-
-train_loss = train_loss_accu / len(train_loader)
-
-valid_loss = valid_loss_accu / len(valid_loader)
-
-print(f"第 {epoch + 1}/{epochs} 轮，训练损失：{train_loss :.4f}，测试损失：{valid_loss :.4f}")
-
-  
-
-# 单步预测与多步预测
-
-step001_predi = net(features).detach().squeeze()
-
-step500_predi = multi_step_predict(features, step_begin=400, step_num=500)
-
-  
-
-# 可视化
-
-plt.figure(figsize=(10, 5))
-
-plt.plot(time_steps, values, label='Sine Wave with Noise', lw=0.8, ls='-', color='#2E7CEE')
-
-plt.plot(time_steps[:sample_size], step001_predi, label='Predict 001 step(s)', lw=0.8, ls='-.', color='#FCC526')
-
-plt.plot(time_steps[400:400 + 500], step500_predi, label='Predict 500 step(s)', lw=0.8, ls='-.', color='#E53E31')
-
-plt.xlabel('time_steps')
-
-plt.ylabel('values')
-
-plt.legend()
-
-plt.grid()
-
-plt.show()
-
-```
-
-  
-
-<img src="https://cdn.nlark.com/yuque/0/2025/png/932482/1737099489905-9d9a9e66-cb3c-4d38-bd6d-a34dd51c7ccf.png" width="640" title="" crop="0,0,1,1" id="ud0827d5d" class="ne-image">
-
-  
-
-<font style="color:rgba(252,197,38,1);">黄色</font>的单步预测结果较为理想，但<font style="color:rgba(229,62,49,1);">红色</font>的多步预测就没有这么令人满意了。**随着预测步骤的向前推进，预测结果逐渐偏离真实值并最终衰减到一个常数。这是由于误差累积导致的。**我们需要更好的设计改进这一点。
