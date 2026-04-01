@@ -21,61 +21,40 @@ $$ \begin{align}h_t &= f(x_t, h_{t-1}, w_h) \\o_t &= g(h_t, w_o)\end{align} $$
 $$ L(x_1, \ldots, x_T, y_1, \ldots, y_T, w_h, w_o) = \frac{\sum_{t=1}^T l(o_t, y_t)}{T} $$
 
 ### 反向传播
-在随后的反向传播过程中，需要计算损失函数$ L $对所有参数的梯度：
+在随后的反向传播过程中，需要计算损失函数 $L$ 对所有参数的梯度：
 
-+ **输出层权重**$ w_o $**的梯度**。输出$ o_t $仅与当前隐状态$ h_t $和$ w_o $有关，不需要沿时间步展开，计算简单：
++ **输出层权重** $w_o$ **的梯度**。输出 $o_t$ 仅与当前隐状态 $h_t$ 和 $w_o$有关，不需要沿时间步展开，计算简单：
+$$ \begin{align}\frac{\partial L}{\partial w_o}&= \frac{1}{T} \sum_{t=1}^T \frac{\partial l(o_t, y_t)}{\partial w_o}  \\&= \frac{1}{T} \sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial o_t}{\partial w_o}\right)  \\&= \frac{1}{T} \sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial g(h_t, w_o)}{\partial w_o}\right)\end{align} $$
 
-$ \begin{align}
-\frac{\partial L}{\partial w_o}
-&= \frac{1}{T} \sum_{t=1}^T \frac{\partial l(o_t, y_t)}{\partial w_o}  \\
-&= \frac{1}{T} \sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial o_t}{\partial w_o}\right)  \\
-&= \frac{1}{T} \sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial g(h_t, w_o)}{\partial w_o}\right)
-\end{align} $
+> 输出层权重 $w_o$ （以及其他参数）的梯度计算方法与前馈神经网络的梯度计算方法一致，无时间步的递归。
++ **隐藏层权重** $w_h$ **的梯度**：
 
-> 输出层权重$ w_o $（以及其他参数）的梯度计算方法与前馈神经网络的梯度计算方法一致，无时间步的递归。
->
+$$ \begin{align}\frac{\partial L}{\partial w_h}&= \frac{1}{T}\sum_{t=1}^T \frac{\partial l(o_t, y_t)}{\partial w_h}  \\&= \frac{1}{T}\sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial o_t}{\partial h_t} \cdot {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \right) \\&= \frac{1}{T}\sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial g(h_t, w_o)}{\partial h_t} \cdot {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \right) \\\end{align} $$
 
-+ **隐藏层权重**$ w_h $**的梯度**：
+在隐藏层权重 $w_h$ 的梯度计算的乘积累加过程中，损失函数对输出的偏导数 $\tfrac{\partial l(o_t, y_t)}{\partial o_t}$ 和输出函数对隐藏状态的偏导数 $\tfrac{\partial g(h_t, w_o)}{\partial h_t}$ 都很好计算。在数学表示上，需要用全导数 ${\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}}$ 表示隐藏层权重 $w_h$ 对隐状态 $h_t$ 的全部影响（梯度在时间维度上的累积效应），而隐状态与权重有递归的依赖关系（$h_t = f(x_t, h_{t-1}, w_h)$）。这里，$w_h$ 对 $h_t$ 的全部影响来自两条路径：
+1. 当前时间步隐状态  $h_t$ 对权重 $w_h$ 的**直接依赖**；
+2. 权重 $w_h$ 影响上一个时间步的隐状态 $h_{t-1}$ 后，**递归依赖**地影响当前时间步的隐状态 $h_t$ 。
 
-$ \begin{align}
-\frac{\partial L}{\partial w_h}
-&= \frac{1}{T}\sum_{t=1}^T \frac{\partial l(o_t, y_t)}{\partial w_h}  \\
-&= \frac{1}{T}\sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial o_t}{\partial h_t} \cdot {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \right) \\
-&= \frac{1}{T}\sum_{t=1}^T \left(\frac{\partial l(o_t, y_t)}{\partial o_t} \cdot \frac{\partial g(h_t, w_o)}{\partial h_t} \cdot {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \right) \\
-\end{align} $
+因此，$w_h$ 对$h_t$ 的全导数 ${\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}}$ 表示为：
 
-在隐藏层权重$ w_h $的梯度计算的乘积累加过程中，损失函数对输出的偏导数$ \tfrac{\partial l(o_t, y_t)}{\partial o_t} $和输出函数对隐藏状态的偏导数$ \tfrac{\partial g(h_t, w_o)}{\partial h_t} $都很好计算。在数学表示上，需要用全导数$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $表示隐藏层权重$ w_h $对隐状态$ h_t $的全部影响（梯度在时间维度上的累积效应），而隐状态与权重有递归的依赖关系（$ h_t = f(x_t, h_{t-1}, w_h) $）。这里，$ w_h $对$ h_t $的全部影响来自两条路径：
-
-1. 当前时间步隐状态$ h_t $对权重$ w_h $的**直接依赖**；
-2. 权重$ w_h $影响上一个时间步的隐状态$ h_{t-1} $后，**递归依赖**地影响当前时间步的隐状态$ h_t $。
-
-因此，$ w_h $对$ h_t $的全导数$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $表示为：
-
-$ \begin{align}
-{\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}}
-&= {\color{salmon} \underbrace{\frac{\partial h_t}{\partial w_h}}_{\text{直接依赖项}}} + {\color{royalblue} \underbrace{\frac{\partial h_t}{\partial h_{t-1}} \cdot \frac{\mathrm{d} h_{t-1}}{\mathrm{d} w_h}}_{\text{递归依赖项}}} \quad {\color{Gray} \text{\scriptsize （链式法则分解）}}  \\
-&= {\color{salmon} \frac{\partial f(x_t,h_{t-1},w_h)}{\partial w_h}} + {\color{royalblue} \frac{\partial f(x_t,h_{t-1},w_h)}{\partial h_{t-1}} \cdot \frac{\mathrm{d} h_{t-1}}{\mathrm{d} w_h}}  \\
-&= \frac{\partial f_t}{\partial w_h} + \frac{\partial f_t}{\partial h_{t-1}} \frac{\partial f_{t-1}}{\partial w_h} + \frac{\partial f_t}{\partial h_{t-1}} \frac{\partial f_{t-1}}{\partial h_{t-2}} \frac{\partial f_{t-2}}{\partial w_h} + \cdots + \left( \prod_{j=2}^t \frac{\partial f_j}{\partial h_{j-1}} \right) \frac{\partial f_1}{\partial w_h} \quad {\color{Gray} \scriptsize \text{（递归展开到 }t_1\text{）}}  \\
-&= {\color{salmon} \frac{\partial f_t}{\partial w_h}} + {\color{royalblue} \sum_{i=1}^{t-1} \left( \prod_{j=i+1}^t \frac{\partial f(x_j, h_{j-1}, w_h)}{\partial h_{j-1}}\right) \cdot \frac{\partial f(x_i, h_{i-1}, w_h)}{\partial w_h}} \quad {\color{Gray} \text{\scriptsize（递归依赖项求和）}}
-\end{align} $
+$$ \begin{align}{\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}}&= {\color{salmon} \underbrace{\frac{\partial h_t}{\partial w_h}}_{\text{直接依赖项}}} + {\color{royalblue} \underbrace{\frac{\partial h_t}{\partial h_{t-1}} \cdot \frac{\mathrm{d} h_{t-1}}{\mathrm{d} w_h}}_{\text{递归依赖项}}} \quad {\color{Gray} \text{\scriptsize （链式法则分解）}}  \\&= {\color{salmon} \frac{\partial f(x_t,h_{t-1},w_h)}{\partial w_h}} + {\color{royalblue} \frac{\partial f(x_t,h_{t-1},w_h)}{\partial h_{t-1}} \cdot \frac{\mathrm{d} h_{t-1}}{\mathrm{d} w_h}}  \\&= \frac{\partial f_t}{\partial w_h} + \frac{\partial f_t}{\partial h_{t-1}} \frac{\partial f_{t-1}}{\partial w_h} + \frac{\partial f_t}{\partial h_{t-1}} \frac{\partial f_{t-1}}{\partial h_{t-2}} \frac{\partial f_{t-2}}{\partial w_h} + \cdots + \left( \prod_{j=2}^t \frac{\partial f_j}{\partial h_{j-1}} \right) \frac{\partial f_1}{\partial w_h} \quad {\color{Gray} \scriptsize \text{（递归展开到 }t_1\text{）}}  \\&= {\color{salmon} \frac{\partial f_t}{\partial w_h}} + {\color{royalblue} \sum_{i=1}^{t-1} \left( \prod_{j=i+1}^t \frac{\partial f(x_j, h_{j-1}, w_h)}{\partial h_{j-1}}\right) \cdot \frac{\partial f(x_i, h_{i-1}, w_h)}{\partial w_h}} \quad {\color{Gray} \text{\scriptsize（递归依赖项求和）}}\end{align} $$
 
 其中，
++ $i \in \{1, 2, \ldots, t-1\}$：梯度贡献的起始时间步索引（历史依赖）；
++ $j \in \{i+1, i+2, \ldots, t\}$：连乘项索引（传播路径）；
++ 特别地，当$t=1$ 时，$h_0$与$w_h$ 无关连乘项退化为 1：${\color{Firebrick}\frac{\mathrm{d} h_1}{\mathrm{d} w_h}} = \frac{\partial f(x_1, h_0, w_h)}{\partial w_h}$。
 
-+ $ i \in \{1, 2, \ldots, t-1\} $：梯度贡献的起始时间步索引（历史依赖）；
-+ $ j \in \{i+1, i+2, \ldots, t\} $：连乘项索引（传播路径）；
-+ 特别地，当$ t=1 $时，$ h_0 $与$ w_h $无关连乘项退化为 1：$ {\color{Firebrick}\frac{\mathrm{d} h_1}{\mathrm{d} w_h}} = \frac{\partial f(x_1, h_0, w_h)}{\partial w_h} $。
+每个历史时间步的权重梯度贡献 $\tfrac{\partial f_i}{\partial w_h}$ 与连乘项 $\prod\ _{j=i+1}^t \tfrac{\partial f_j}{\partial h_{j-1}}$ 共同产生梯度累积效应，通过后续时间步的隐状态传播到当前时间步 $t$ 。
 
-每个历史时间步的权重梯度贡献$ \tfrac{\partial f_i}{\partial w_h} $与连乘项$ \prod\ _{j=i+1}^t \tfrac{\partial f_j}{\partial h_{j-1}} $共同产生梯度累积效应，通过后续时间步的隐状态传播到当前时间步$ t $。
-
-虽然$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $在理论上满足可计算性，但完成计算的复杂度很高，为$ \mathcal{O} (T^2) $。特别是当$ T $很长时，初始条件的微小变化将对结果产生巨大影响：当$ \left| \tfrac{\partial f_j}{\partial h_{j-1}}\right| \gg 1 $时，将诱发梯度爆炸，当$ \left| \tfrac{\partial f_j}{\partial h_{j-1}}\right| \ll 1 $，将诱发梯度消失。这需要我们适时截断梯度计算的路径，控制依赖项的展开长度。
+虽然${\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}}$ 在理论上满足可计算性，但完成计算的复杂度很高，为$\mathcal{O} (T^2)$ 。特别是当 $T$很长时，初始条件的微小变化将对结果产生巨大影响：当$\left| \tfrac{\partial f_j}{\partial h_{j-1}}\right| \gg 1$ 时，将诱发梯度爆炸，当 $\left| \tfrac{\partial f_j}{\partial h_{j-1}}\right| \ll 1$ ，将诱发梯度消失。这需要我们适时截断梯度计算的路径，控制依赖项的展开长度。
 
 ## 梯度计算路径的截断策略
-限制梯度反向传播的时间跨度，以解决长程梯度依赖难题，减小计算代价、提高数值稳定性，需对$ {\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}} $完整梯度表达式中的求和项$ \sum\ _{i=1}^{t-1} $进行约束，这些截断策略本质上需显式或隐式地由`[torch.detach()](https://www.yuque.com/tully/d2l/vmhmv5aml2byglfk#hCgzT)`调用。
+限制梯度反向传播的时间跨度，以解决长程梯度依赖难题，减小计算代价、提高数值稳定性，需对 ${\color{Red} \tfrac{\mathrm{d} h_t}{\mathrm{d} w_h}}$ 完整梯度表达式中的求和项 $\sum\ _{i=1}^{t-1}$进行约束，这些截断策略本质上需显式或隐式地由`[torch.detach()](https://www.yuque.com/tully/d2l/vmhmv5aml2byglfk#hCgzT)`调用。
 
 <img src="https://cdn.nlark.com/yuque/0/2025/jpeg/932482/1741352025184-a53ae3c9-80b5-4057-92d8-7a01d11494d7.jpeg" width="480" title="" crop="0,0,1,1" id="u0c027aa5" class="ne-image">
 
 ### 等距截断
-等距截断策略以最近的$ \tau $个时间步为**固定窗口**，仅计算$ \sum\ _{i=\max(1, t-\tau)}^{t-1} $（注意避免索引越界），使模型忽略长于$ \tau $个时间步的历史依赖，计算复杂度为$ \mathcal{O} (\tau T) $。等距截断近似法的表达式为：
+等距截断策略以最近的 $\tau$ 个时间步为**固定窗口**，仅计算 $\sum\ _{i=\max(1, t-\tau)}^{t-1}$ （注意避免索引越界），使模型忽略长于 $\tau$ 个时间步的历史依赖，计算复杂度为 $\mathcal{O} (\tau T)$ 。等距截断近似法的表达式为：
 
 $ {\color{Red} \frac{\mathrm{d} h_t}{\mathrm{d} w_h}} \approx {\color{salmon} \frac{\partial f_t}{\partial w_h}} + \sum_{i=\max(1, t-\tau)}^{t-1} \left( \prod_{j=i+1}^t \frac{\partial f_j}{\partial h_{j-1}}\right) \cdot \frac{\partial f_i}{\partial w_h} $
 
