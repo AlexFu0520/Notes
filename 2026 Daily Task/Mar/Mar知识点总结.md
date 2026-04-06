@@ -235,5 +235,12 @@ $$=\int_{-\infty}^{\infty}c(\vec{p},t) \delta(\vec{p}-\vec{p'})\mathrm{d} \vec{p
 $$\mathrm{i}\hbar \frac{\partial\Psi}{\partial t}=- \frac{\hbar^2}{2m} \nabla^2 \Psi+U(\vec{r})\Psi$$
 式中 $U(\vec{r})$ 为粒子在力场中的势能
 ### 粒子流密度和粒子数守恒定律
-令 $J\equiv \frac{\mathrm{i}\hbar}{2m}(\Psi \nabla\Psi^{\ast}-\Psi^{\ast} \nabla\Psi)$，
+$\vec{J}$ 为概率流密度矢量，令 $J\equiv \frac{\mathrm{i}\hbar}{2m}(\Psi \nabla\Psi^{\ast}-\Psi^{\ast} \nabla\Psi)$，则粒子数守恒定律的微分形式为：$$\frac{\partial\omega}{\partial t}+\nabla \cdot  \vec{J}=0$$
+#### 波函数的标准化条件
+有限性，连续性和导致可测量的单值性
+
+### 定态薛定谔方程
+定态薛定谔方程：$$- \frac{\hbar^2}{2m}\nabla^2\Psi+U(\vec{r})\Psi=E\Psi$$
+定态波函数可表示为$$\Psi(\vec{r},t)=\Psi(\vec{r})e^{-\frac{\mathrm{i}E}{\hbar}t}$$
+
 
