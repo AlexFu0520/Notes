@@ -250,5 +250,10 @@ $\vec{J}$ 为概率流密度矢量，令 $J\equiv \frac{\mathrm{i}\hbar}{2m}(\Ps
 考虑在一维空间中运动的粒子，它的势能在一定区域内(-a<x<a)为0，而在此区域外的势能为无限大，即$$\begin{cases}U(x)=0,|x|<a\\U(x)=\infty,|x|>a\end{cases}$$
 这种势称为一维无限深方势阱
 
-一维无限深方势阱中粒子的定态波函数为：$$\Psi_{n}(x,t)=\Psi_{n}(x)e^$$
+一维无限深方势阱中粒子的定态波函数为：$$\Psi_{n}(x,t)=\Psi_{n}(x)e^{- \frac{\mathrm{i}}{\hbar}E_{n}t}=A'\sin \frac{n\pi}{2a}(x+a)e^{- \frac{\mathrm{i}}{\hbar}E_{n}t}$$
+### 线性谐振子
+如果在一维空间内运动的粒子的势能为抛物线形式:$U(x)=ax^2(a>0)$ ，则这种体系就称为线性谐振子
+
+本征值:$$E_{n}=\hbar \omega\left( n+\frac{1}{2} \right)$$
+本征函数：$$\psi_{n}(x)=\left( \frac{\alpha}{\pi^{\frac{1}{2}}2^n n!} \right)^{\frac{1}{2}}e^{-\frac{1}{2}\alpha^2x^2}H_{n}(\alpha x)$$$$\alpha = \sqrt{ m\omega }$$
 
