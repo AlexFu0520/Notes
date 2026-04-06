@@ -217,7 +217,14 @@ $$\oint p \mathrm{d} q=\left( n + \frac{1}{2} \right)h$$
 q是电子的一个广义坐标，p对应的是广义动量，n为量子数
 ### 德布罗意关系
 $$E=h\nu=\hbar \omega$$$$\vec{p}=\frac{h}{\nu} \vec{e_{k}}=\hbar  \vec{k}$$
-
-
-
+### 德布罗意波长公式
+$$\lambda=\frac{h}{p}=\frac{h}{\sqrt{ 2mE }}$$
 ## 第二章  波函数与薛定谔方程
+### 波函数的统计解释
+波函数在空间中某一点的强度(振幅绝对值的平方)和在该点找到粒子的概率成比例
+#### 波函数的归一化条件
+$$\int_{\infty}|\Psi(\vec{r},t)|^2 \mathrm{d}V=\int_{\infty}\Psi(\vec{r},t)\cdot \Psi^\ast(\vec{r},t)\mathrm{d}V=1$$
+#### 自由粒子的波函数
+$$\Psi_{p}(\vec{r},t)=A e^{\mathrm{i}/\hbar(\vec{p}\cdot \vec{r}-Et)}$$
+### 态叠加原理
+#### 证明
