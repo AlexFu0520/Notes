@@ -227,4 +227,6 @@ $$\int_{\infty}|\Psi(\vec{r},t)|^2 \mathrm{d}V=\int_{\infty}\Psi(\vec{r},t)\cdot
 #### 自由粒子的波函数
 $$\Psi_{p}(\vec{r},t)=A e^{\mathrm{i}/\hbar(\vec{p}\cdot \vec{r}-Et)}$$
 ### 态叠加原理
-#### 证明
+#### 证明任何一个波函数 $\vec{\Psi}(\vec{r},t)$ 都可以看成各种不同动量的平面波的叠加，换句话说，任何波函数 $\vec{\Psi})(\vec{r},t)$ 都可以写成如下形式：$$\Psi(\vec{r},t)=\iiint_{-\infty}^{\infty}c(\vec{p},t)\Psi_{p}(\vec{r})\mathrm{d}p_{x}\mathrm{d}p_{y}\mathrm{d}p_{z}$$式中：$$\Psi_{p}(\vec{r})\equiv\frac{1}{(2\pi \hbar)^{3/2}}e^{\frac{\mathrm{i}}{\hbar}  \vec{p}\cdot  \vec{r}}$$
+$$\int\Psi_{p'}^{\ast}\Psi(\vec{r},t)\mathrm{d} \vec{r}=\int_{-\infty}^{\infty}c(\vec{p},t)\left[ \int_{-\infty}^{\infty} \Psi_{p'}^{\ast}\Psi(\vec{r},t)\mathrm{d} \vec{r}\right]\mathrm{d} \vec{p} $$
+$$=\int_{-\infty}^{\infty}c(\vec{p},t)\left[ \frac{1}{(2\pi)} \right]$$
