@@ -255,5 +255,10 @@ $\vec{J}$ 为概率流密度矢量，令 $J\equiv \frac{\mathrm{i}\hbar}{2m}(\Ps
 如果在一维空间内运动的粒子的势能为抛物线形式:$U(x)=ax^2(a>0)$ ，则这种体系就称为线性谐振子
 
 本征值:$$E_{n}=\hbar \omega\left( n+\frac{1}{2} \right)$$
-本征函数：$$\psi_{n}(x)=\left( \frac{\alpha}{\pi^{\frac{1}{2}}2^n n!} \right)^{\frac{1}{2}}e^{-\frac{1}{2}\alpha^2x^2}H_{n}(\alpha x)$$$$\alpha = \sqrt{ m\omega }$$
+本征函数：$$\psi_{n}(x)=\left( \frac{\alpha}{\pi^{\frac{1}{2}}2^n n!} \right)^{\frac{1}{2}}e^{-\frac{1}{2}\alpha^2x^2}H_{n}(\alpha x)$$$$\alpha = \sqrt{ \frac{m\omega}{habr} }$$$$\psi_{n}(-x)=(-1)^n \psi_{n}(x)$$
+### 势垒穿透
+方雄势垒：$$U(x)=\begin{cases}U_{0},0<x<a\\0,x<0,x>a\end{cases}$$
+当 $k,a \gg 1$ 时，透射系数为 $$D=D_{0}e^{- \frac{2}{\hbar}\sqrt{ 2m(U_{0}-E) }}$$
+对任意形状势垒 $U(x)$ ,透射系数为：$$D=D_{0}e^{-\frac{2}{\hbar}\int_{a}^b\sqrt{ 2m[U(x)-E] }\mathrm{d}x}$$
+
 
