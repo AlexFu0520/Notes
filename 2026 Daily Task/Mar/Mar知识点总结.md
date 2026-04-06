@@ -242,5 +242,13 @@ $\vec{J}$ 为概率流密度矢量，令 $J\equiv \frac{\mathrm{i}\hbar}{2m}(\Ps
 ### 定态薛定谔方程
 定态薛定谔方程：$$- \frac{\hbar^2}{2m}\nabla^2\Psi+U(\vec{r})\Psi=E\Psi$$
 定态波函数可表示为$$\Psi(\vec{r},t)=\Psi(\vec{r})e^{-\frac{\mathrm{i}E}{\hbar}t}$$
+经典力学中哈密顿函数为：$$E=\frac{p^2}{2m}+U(\vec{r})$$
+则哈密顿算符可表示为$$\hat{H}=- \frac{\hbar^2}{2m}\nabla^2 + U(\vec{r})$$
+则定态薛定谔方程可写为：$$\hat{H}\Psi=E\Psi$$
+这种类型的方程称为本征值方程，$E$ 称为算符 $\hat{H}$ 的本征值，$\Psi$ 称为算符 $\hat{H}$ 属于本征值 $E$ 的本征函数
+### 一维无限深方势阱
+考虑在一维空间中运动的粒子，它的势能在一定区域内(-a<x<a)为0，而在此区域外的势能为无限大，即$$\begin{cases}U(x)=0,|x|<a\\U(x)=\infty,|x|>a\end{cases}$$
+这种势称为一维无限深方势阱
 
+一维无限深方势阱中粒子的定态波函数为：$$\Psi_{n}(x,t)=\Psi_{n}(x)e^$$
 
