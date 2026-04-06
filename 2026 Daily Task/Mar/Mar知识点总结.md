@@ -207,6 +207,17 @@ $$\rho_{\nu}\mathrm{d}\nu=\frac{8\pi h\nu^3}{c^3}\cdot \frac{1}{e^{h\nu/k_{B}T}-
 ### 光电效应方程
 $$\frac{1}{2}m_{e}\nu_{m}^2=h\nu - W_{0}$$
 ### 康普顿效应
-$$\Delta \lambda =\lambda'-\lambda=4\pi $$
+$$\Delta \lambda =\lambda'-\lambda=\frac{4\pi\hbar}{m_{0}c}\sin^2 \frac{\theta}{2}=\frac{h}{m_{0}c}(1-\cos \theta)=\lambda_{c}(1-\cos \theta)$$
+式中 $\lambda_{c}$ 为康普顿波长
+### 巴耳末公式
+$$\nu=R_{\infty}c\left( \frac{1}{n'^2}-\frac{1}{n^2} \right)$$
+并且得出 $R_{\infty}=\frac{m_{e}e^4}{8 \varepsilon_{0}^2h^3c}$
+### 玻尔-索末菲量子化条件
+$$\oint p \mathrm{d} q=\left( n + \frac{1}{2} \right)h$$
+q是电子的一个广义坐标，p对应的是广义动量，n为量子数
+### 德布罗意关系
+$$E=h\nu=\hbar \omega$$$$\vec{p}=\frac{h}{\nu} \vec{e_{k}}=\hbar  \vec{k}$$
+
+
 
 ## 第二章  波函数与薛定谔方程
