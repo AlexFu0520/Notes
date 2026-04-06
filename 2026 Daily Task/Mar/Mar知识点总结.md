@@ -201,4 +201,12 @@ $$\vec{e_{n}}\cdot(\vec{D_{1}}-  \vec{D_{2}})=\rho_{S} 或 D_{1n}-D_{2n}=\rho_{S
 将电导率很低的介质称为理想介质，边界条件为：$$\vec{e_{n}}\times ( \vec{H}_{1}-  \vec{H_{2}})=0 $$$$\vec{e_{n}}\times (\vec{E_{1}}-  \vec{E_{2}})=0$$$$\vec{e_{n}}\cdot (\vec{B_{1}}-  \vec{B_{2}})=0 $$$$\vec{e_{n}}\cdot(\vec{D_{1}}-  \vec{D_{2}})=0$$
 # 量子力学
 ## 第一章 绪论
+### 普朗克黑体辐射公式
+$$\rho_{\nu}\mathrm{d}\nu=\frac{8\pi h\nu^3}{c^3}\cdot \frac{1}{e^{h\nu/k_{B}T}-1}\mathrm{d}\nu$$
+式中, $\rho_{\nu }$ 是黑体内频率在 $\nu$ 到 $\nu +\mathrm{d}\nu$ 之间的辐射能量密度, $c$ 是光速 ,$k_{B}$ 是玻尔兹曼常数，$T$ 是黑体的热力学温度
+### 光电效应方程
+$$\frac{1}{2}m_{e}\nu_{m}^2=h\nu - W_{0}$$
+### 康普顿效应
+$$\Delta \lambda =\lambda'-\lambda=4\pi $$
+
 ## 第二章  波函数与薛定谔方程
