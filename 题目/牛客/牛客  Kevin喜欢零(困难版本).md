@@ -49,5 +49,71 @@
 问题就转化为以上的式子了，我们可以采用滑动窗口去计算至少有k个零的个数，再根据容斥原理：$$恰好为k个零的个数=至少k个零的数量-至少k+1个零的数量$$
 ## ACcode:
 ```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+typedef long long ll;
 
+const int N = 2e5  + 5;
+ll n,k;
+ll cnt2[N],cnt5[N]; //存储第i个位置上因子2，5的个数
+
+ll cal(int k) {
+    ll l = 0,ans = 0;
+    ll sum2 = 0,sum5 = 0;
+    //滑动窗口
+    for (ll r = 0 ; r < n ; ++r) {
+        sum2 += cnt2[r];
+        sum5 += cnt5[r];
+
+        //l会停在第一次不满足有k个尾零的位置
+        while (l <= r && sum2 >= k && sum5 >= k) {
+            sum2 -= cnt2[l];
+            sum5 -= cnt5[l];
+            ++l;
+        }
+
+        //以r为右端点，[0,l-1]为左端点
+        //在这个范围内全都是尾零 >= k的子序列
+        ans += l;
+    }
+    return ans;
+}
+
+void solve() {
+    cin >> n >> k;
+    vector<int> a(n);
+    for (int i = 0 ; i < n ; ++i) {
+        cin >> a[i];
+        cnt2[i] = 0,cnt5[i] = 0;
+
+        //计算第i个位置上因子2和5的个数
+        while (a[i] % 2 == 0) {
+            cnt2[i]++;
+            a[i] /= 2;
+        }
+
+        while (a[i] % 5 == 0) {
+            cnt5[i]++;
+            a[i] /=5;
+        }
+    }   
+    //答案就是尾零 >=k的个数-尾零 >=k+1的个数
+    cout << cal(k) - cal(k + 1) << '\n';
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int T = 1;
+    cin >> T;
+
+    while (T--) {
+        solve();
+    }
+    return 0;
+}
 ```
