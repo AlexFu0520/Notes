@@ -13,7 +13,7 @@
   "azureOpenAIApiVersion": "",
   "azureOpenAIApiEmbeddingDeploymentName": "",
   "googleApiKey": "",
-  "openRouterAiApiKey": "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",
+  "openRouterAiApiKey": "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",
   "xaiApiKey": "",
   "mistralApiKey": "",
   "deepseekApiKey": "",
@@ -303,6 +303,11 @@
     },
     {
       "name": "qwen/qwen-turbo",
+      "provider": "openrouterai",
+      "enabled": true
+    },
+    {
+      "name": "openai/gpt-oss-120b:free",
       "provider": "openrouterai",
       "enabled": true
     }
