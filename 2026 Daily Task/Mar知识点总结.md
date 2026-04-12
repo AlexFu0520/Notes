@@ -260,5 +260,6 @@ $\vec{J}$ 为概率流密度矢量，令 $J\equiv \frac{\mathrm{i}\hbar}{2m}(\Ps
 方雄势垒：$$U(x)=\begin{cases}U_{0},0<x<a\\0,x<0,x>a\end{cases}$$
 当 $k,a \gg 1$ 时，透射系数为 $$D=D_{0}e^{- \frac{2}{\hbar}\sqrt{ 2m(U_{0}-E) }}$$
 对任意形状势垒 $U(x)$ ,透射系数为：$$D=D_{0}e^{-\frac{2}{\hbar}\int_{a}^b\sqrt{ 2m[U(x)-E] }\mathrm{d}x}$$
+# 工程光学
 
 

@@ -300,6 +300,11 @@
       "provider": "openrouterai",
       "enabled": true,
       "maxTokens": 128000
+    },
+    {
+      "name": "qwen/qwen-turbo",
+      "provider": "openrouterai",
+      "enabled": true
     }
   ],
   "activeEmbeddingModels": [
@@ -417,7 +422,7 @@
   "defaultConversationNoteName": "{$topic}@{$date}_{$time}",
   "inlineEditCommands": [],
   "projectList": [],
-  "lastDismissedVersion": null,
+  "lastDismissedVersion": "3.2.7",
   "passMarkdownImages": true,
   "enableAutonomousAgent": true,
   "enableCustomPromptTemplating": true,
@@ -429,7 +434,6 @@
   "selfHostUrl": "",
   "selfHostApiKey": "",
   "miyoServerUrl": "",
-  "miyoRemoteVaultPath": "",
   "selfHostSearchProvider": "firecrawl",
   "firecrawlApiKey": "",
   "perplexityApiKey": "",
